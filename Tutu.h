@@ -24,4 +24,4 @@ class User
     string password;
 }Us;
 
-User user[UserNumber];//
+User user[UserNumber];//Hello
