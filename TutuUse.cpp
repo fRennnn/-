@@ -3,7 +3,7 @@ int main()
 {
     while(1)
     {
-        Menu();
+        Menu();//累死爷了
     }  
     system("pause");
     return 0;
