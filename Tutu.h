@@ -3,25 +3,29 @@
 #include<conio.h>
 #include<stdlib.h>
 #include<windows.h>
+#include"iostream"
+#include"fstream"
 using namespace std;
 
-#define UserNumber 100
-
-bool IsVip = false;
+#define SIZE 10
+int scount = 0;
+bool IsVip = false;//判断是不是VIP
+bool ZHUANGTAI = false;//判断文件是否成功打开
 void Menu();
 void gotoxy(int x,int y);
 
 class User
 {
+    private:
+    string phone;
+    string password;
     public:
-    User();
-    ~User();
+    User(){};
     void Registers();
     void Login();
     void Save();
     void Read();
-    private:
-    string password;
-}Us;
+}us;
 
-User user[UserNumber];//Hello
+void CountMenu();
+User user[SIZE];
