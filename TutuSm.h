@@ -17,7 +17,7 @@ void Menu()
     {
         cout<<"当前为管理员状态";
         gotoxy(65,1);
-        cout<<"当前UID:"<<user[Location].phone;
+        cout<<"当前UID:"<<user[Location].phone;//使用隐藏密码输入会导致uid错乱
     }
     
     gotoxy(5,0);
@@ -94,13 +94,21 @@ void CountMenu()
 {
     system("cls");
     char ch;
+    if(!UpOrDown)
+    {
     cout<<"1-- 登录账号 "<<endl;
     cout<<"2-- 注册账号"<<endl;
+    }
     cout<<"3-- 退出账号"<<endl;
     User Uid;
     while(1)
     {
         ch=getch();
+        if(GetAsyncKeyState(VK_ESCAPE))
+        {
+            system("cls");
+            return;
+        }
         if(ch=='1'||ch=='2'||ch=='3')
         {
             break;
@@ -114,11 +122,21 @@ void CountMenu()
     {
         case '1':
         {
+            if(UpOrDown)
+            {
+                cout<<"干什么呢?";
+            }
+            else
             Uid.Login();
         }
         break;
         case '2':
         {
+            if(UpOrDown)
+            {
+                cout<<"干什么呢?";
+            }
+            else
             Uid.Registers();
         }
         break;
@@ -177,8 +195,15 @@ void User::Registers()
     {
         system("cls");
         here:
-        cout<<"\t\t\t请输入手机号:";
+        cout<<"\t\t\t请输入手机号:(输入000退出)";
+        
         cin>>ph;
+        
+        if(ph=="000")
+        {
+            return;
+        }
+
         for(int i=0;i<scount;i++)
         {
             if(ph==user[i].phone)
@@ -191,7 +216,8 @@ void User::Registers()
 
         
         cout<<endl;
-        cout<<"1 -- 显示密码  2 --隐藏密码"<<endl;
+        cout<<"选择输入模式:"<<endl;
+        cout<<"1 --显示密码输入  2 --隐藏密码输入"<<endl;
 
         char chose=getch();
         if(chose > '2' || chose < '0')
@@ -289,7 +315,7 @@ void User::Registers()
             }
         }
         char choice;
-        IsVip=true;
+        IsVip=true;//这是管理员账号，所以你有权限了
             cout<<"是否继续注册(Y/N)?:";
             while(1)
             {
@@ -311,11 +337,16 @@ void User::Login()
     int x=0;
     char chose;
     here:
-    cout<<"\t\t\t请输入手机号:";
+    cout<<"\t\t\t请输入手机号:(输入000退出)";
+
     cin>>ph;
-    
+    if(ph=="000")
+        {
+            return;
+        }
     cout<<endl;
-    cout<<"1--显示密码 2--隐藏密码"<<endl;
+    cout<<"选择输入模式:"<<endl;
+    cout<<"1--显示密码输入 2--隐藏密码输入"<<endl;
      while(1)
     {
         chose=getch();
@@ -342,6 +373,7 @@ void User::Login()
                     cout<<"登陆成功!";
                     UpOrDown = true;
                     IsVip=true;
+
                     Location=i;
                     return;
                 }
@@ -386,6 +418,7 @@ void User::Login()
                     cout<<"登陆成功"<<endl;
                     UpOrDown = true;
                     IsVip=true;
+                    Location=i;
                 }
             }
             if(time == 0)
