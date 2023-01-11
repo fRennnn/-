@@ -189,8 +189,12 @@ void User::Registers()
     us.Read();
     if(!ZHUANGTAI) return; //如果没有文件就退出
     string ph;
-    string pw1;
-    string pw2;
+    string pword;
+    string pword1;
+    char ch,password0[20];
+    char ch1,password1[20];
+    int x = 0,x1 = 0;
+    
     for(int i=scount;i<SIZE;i++)
     {
         system("cls");
@@ -225,11 +229,7 @@ void User::Registers()
             cout<<"请重新输入:";
             chose=getch();
         }
-        string pword;
-        string pword1;
-        char ch,password0[20];
-        char ch1,password1[20];
-        int x = 0,x1 = 0;
+        
         switch(chose)
         {
             case '1':
@@ -269,7 +269,7 @@ void User::Registers()
                     }
                     else
                     {
-                        password0[x]=ch;
+                        password0[x++]=ch;
                         cout<<"*";
                     }
                 }
@@ -297,10 +297,7 @@ void User::Registers()
                 }
                 password1[x1] = '\0';
                 cout<<endl;
-                user[i].password = password0;
-                cout<<endl;
-
-                if(password1 != user[i].password)
+                if(password1!= user[i].password)
                 {
                     cout<<"\t\t\t密码不一致!"<<endl;
                     goto here;
@@ -315,7 +312,7 @@ void User::Registers()
             }
         }
         char choice;
-        IsVip=true;//这是管理员账号，所以你有权限了
+        //IsVip=true;//这是管理员账号，所以你有权限了
             cout<<"是否继续注册(Y/N)?:";
             while(1)
             {
