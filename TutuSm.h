@@ -278,13 +278,13 @@ void User::Registers()
                 user[i].password = password0;
 
                 cout<<"请再次输入密码:";
-                while((ch = _getch())!= '\r' && x <= 20)
+                while((ch1 = _getch())!= '\r' && x1 <= 20)
                 {
-                    if(ch == '\b')
+                    if(ch1 == '\b')
                     {
-                        if(x>0)
+                        if(x1>0)
                         {
-                            x--;
+                            x1--;
                             cout<<"\b\b";
                         }
                         else putchar(7);
@@ -295,7 +295,7 @@ void User::Registers()
                         cout<<"*";
                     }
                 }
-                password1[x] = '\0';
+                password1[x1] = '\0';
                 cout<<endl;
                 user[i].password = password0;
                 cout<<endl;
@@ -365,7 +365,7 @@ void User::Login()
         {
             cout<<"请输入密码:";
             cin>>pword;
-            for(int i=0;i<scount;i++)
+            for(int i=0;i<scount;i++)//检查密码是否正确
             {
                 if(ph == user[i].phone && pword ==user[i].password)
                 {
@@ -412,7 +412,7 @@ void User::Login()
     } 
     for(int i=0;i<scount;i++)
             {
-                if(ph==user[i].phone && passwords0 == user[i].password)
+                if(ph==user[i].phone && passwords0 == user[i].password)//检查密码是否正确
                 {
                     time++;
                     cout<<"登陆成功"<<endl;
