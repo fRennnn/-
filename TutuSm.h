@@ -263,7 +263,7 @@ void User::Registers()
                         if(x>0)
                         {
                             x--;
-                            cout<<"\b\b";
+                            cout<<"\b \b";
                         }
                         else putchar(7);
                     }
@@ -285,7 +285,7 @@ void User::Registers()
                         if(x1>0)
                         {
                             x1--;
-                            cout<<"\b\b";
+                            cout<<"\b \b";
                         }
                         else putchar(7);
                     }
@@ -392,7 +392,7 @@ void User::Login()
                     if(x>0)
                     {
                         x--;
-                        cout<<"\b\b";
+                        cout<<"\b \b";
                     }
                     else putchar(7);
                 }
