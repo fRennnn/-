@@ -5,6 +5,8 @@
 #include<windows.h>
 #include"iostream"
 #include"fstream"
+#include<stack>
+#include<queue>
 using namespace std;
 
 #define SIZE 10
@@ -16,10 +18,10 @@ int Location = 0;//用户账号所在的位置
 void Menu();
 void gotoxy(int x,int y);
 
-class User
+class User//用户类
 {
     private:
-    string password;
+    string password;//密码
     public:
     string phone;
     User(){};
