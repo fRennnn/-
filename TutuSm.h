@@ -440,7 +440,18 @@ void User::Login()
                 goto here;
             }
 }
-
+  /*
+        　  　▃▆█▇▄▖
+　 　 　 ▟◤▖　　　◥█▎
+   　 ◢◤　 ▐　　　 　▐▉
+　 ▗◤　　　▂　▗▖　　▕█▎
+　◤　▗▅▖◥▄　▀◣　　█▊
+▐　▕▎◥▖◣◤　　　　◢██
+█◣　◥▅█▀　　　　▐██◤
+▐█▙▂　　     　◢██◤
+◥██◣　　　　◢▄◤
+ 　　▀██▅▇▀
+ */
 void PrintMap()
 {
     system("cls");
@@ -450,6 +461,7 @@ void PrintMap()
     if(!ifile.is_open())
     {
         cout<<"文件打开失败"<<endl;
+        system("pause>nul");
         return;
     }
 
