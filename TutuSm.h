@@ -42,7 +42,8 @@ void Menu()
     cout<<"6 -- 账号系统"<<endl;
    
     cout<<"7 -- 退出系统"<<endl;
-    
+
+    MapRead();
     i=getch();
     //-----------------------------------这是菜单,写好的函数放进去就是了
     switch (i)
@@ -61,12 +62,14 @@ void Menu()
     case '2':
     {
         cout<<"I am 2"<<endl;
-        cout<<"输入"<<endl;
         system("pause>nul");
     }break;
     case '3':
     {
-        cout<<"I am 3"<<endl;
+        int x=0;
+        cout<<"请输入地图编号:"<<endl;
+        cin>>x;
+        MapCheck(x);
         system("pause>nul");
     }break;
     case '4':
@@ -99,7 +102,7 @@ void Menu()
         break;
     }
 //--------------------------------------------
-if(i!='1')
+if(!MapPrintOk)//如果地图已经打开就别清屏了
     system("cls");
 }
 void CountMenu()
@@ -441,16 +444,16 @@ void User::Login()
             }
 }
   /*
-        　  　▃▆█▇▄▖
-　 　 　 ▟◤▖　　　◥█▎
-   　 ◢◤　 ▐　　　 　▐▉
-　 ▗◤　　　▂　▗▖　　▕█▎
-　◤　▗▅▖◥▄　▀◣　　█▊
-▐　▕▎◥▖◣◤　　　　◢██
-█◣　◥▅█▀　　　　▐██◤
-▐█▙▂　　     　◢██◤
+      　  　▃▆█▇▄?
+　 　 　 ?◤?　　　◥█▎
+   　 ◢◤　 ?　　　 　?▉
+　 ?◤　　　▂　??　　▕█▎
+　◤　?▅?◥▄　?◣　　█▊
+?　▕▎◥?◣◤　　　　◢██
+█◣　◥▅█?　　　　?██◤
+?█?▂　　     　◢██◤
 ◥██◣　　　　◢▄◤
- 　　▀██▅▇▀
+ 　　?██▅▇?
  */
 void PrintMap()
 {
@@ -468,4 +471,31 @@ void PrintMap()
     for(string str;getline(ifile,str);)//输出txt文件的所有内容
     cout<<str<<endl;
     MapPrintOk=true;
+}
+
+void MapRead()
+{
+    ifstream ifile;
+    ifile.open("Node.txt",ios::in);
+
+    if(!ifile.is_open())
+    {
+        cout<<"文件打开失败"<<endl;
+        system("pause>nul");
+        return;
+    }
+
+    for(int i=0;!ifile.eof();i++)
+    {
+        ifile >> Point[i].Number;
+        ifile >> Point[i].Name;
+        ifile >> Point[i].Imformation;
+    }
+}
+
+void MapCheck(int i)
+{
+    int position=i-1;
+    cout<<Point[position].Name<<endl;
+    cout<<Point[position].Imformation<<endl;
 }
