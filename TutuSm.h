@@ -1,57 +1,67 @@
 #include"Tutu.h"
-void gotoxy(int x,int y)
+void gotoxy(int x,int y)//什么垃圾? 狗都不用
 {
     COORD c;
     c.X=x;
     c.Y=y;
-    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE),c);
+    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE),c);//依托答辩
 }
 void Menu()
 {
     char i=0;
     int j=0;
-    gotoxy(65,0);
+    
     if(!UpOrDown)
-    cout<<"当前为游客状态";
+    cout<<"\t\t菜单                               当前为游客状态"<<endl;
     else
     {
-        cout<<"当前为管理员状态";
-        gotoxy(65,1);
-        cout<<"当前UID:"<<user[Location].phone;//使用隐藏密码输入会导致uid错乱
+        cout<<"\t\t菜单                               当前为管理员状态"<<endl;
+        
+        cout<<"                                       当前UID:"<<user[Location].phone<<endl;//使用隐藏密码输入会导致uid错乱(已解决)
     }
     
-    gotoxy(5,0);
-    cout<<"菜单";
-    gotoxy(0,1);
-    cout<<"1 -- 打印地图"<<endl;
-    gotoxy(0,2);
+    
+    
+    if(MapPrintOk==false)
+    cout<<"1 -- 显示地图"<<endl;
+    else
+    cout<<"1 -- 关闭地图"<<endl;
+    
     cout<<"2 -- 查询任意两个景点之间的最短路径"<<endl;
-    gotoxy(0,3);
+    
     cout<<"3 -- 查询各景点的相关信息"<<endl;
-    gotoxy(0,4);
+    
     cout<<"4 -- 查询任意两个景点之间的最短距离"<<endl;
-    gotoxy(0,5);
+    
     cout<<"5 -- 增加，删除和更新有关景点和道路信息";
     if(!IsVip)
-    cout<<"(管理员专用)";
+    cout<<"(管理员专用)"<<endl;
     else
-    cout<<"(当前有权限使用)";
-    gotoxy(0,6);
+    cout<<"(当前有权限使用)"<<endl;
+    
     cout<<"6 -- 账号系统"<<endl;
-    gotoxy(0,7);
+   
     cout<<"7 -- 退出系统"<<endl;
     
     i=getch();
+    //-----------------------------------这是菜单,写好的函数放进去就是了
     switch (i)
     {
     case '1':
     {
-        cout<<"I am 1"<<endl;
-        system("pause>nul");
+        if(MapPrintOk==false)
+        PrintMap();
+        else
+        {
+        system("cls");
+        MapPrintOk=false;
+        }
+        cout<<endl;
     }break;
     case '2':
     {
         cout<<"I am 2"<<endl;
+        cout<<"输入"<<endl;
         system("pause>nul");
     }break;
     case '3':
@@ -66,7 +76,7 @@ void Menu()
     }break;
     case '5':
     {
-        if(IsVip)
+        if(IsVip)//简单的判断是不是VIP
         {
             cout<<"I am 5";system("pause>nul");
         }
@@ -84,15 +94,18 @@ void Menu()
     }
     break;
     case '7':
-    exit(0);
+    exit(0);//关闭整个文件
     default:
         break;
     }
+//--------------------------------------------
+if(i!='1')
     system("cls");
 }
 void CountMenu()
 {
     system("cls");
+    MapPrintOk=false;
     char ch;
     if(!UpOrDown)
     {
@@ -107,6 +120,7 @@ void CountMenu()
         if(GetAsyncKeyState(VK_ESCAPE))
         {
             system("cls");
+            MapPrintOk=false;
             return;
         }
         if(ch=='1'||ch=='2'||ch=='3')
@@ -122,7 +136,7 @@ void CountMenu()
     {
         case '1':
         {
-            if(UpOrDown)
+            if(UpOrDown)//账号登陆后就不要再用登陆账号和注册账号这两个功能了
             {
                 cout<<"干什么呢?";
             }
@@ -145,6 +159,7 @@ void CountMenu()
             IsVip=false;
             UpOrDown=false;
             system("cls");
+            MapPrintOk=false;
             cout<<"退出成功";
         }
     }
@@ -198,6 +213,7 @@ void User::Registers()
     for(int i=scount;i<SIZE;i++)
     {
         system("cls");
+        MapPrintOk=false;
         here:
         cout<<"\t\t\t请输入手机号:(输入000退出)";
         
@@ -423,4 +439,21 @@ void User::Login()
                 cout<<"手机号或者密码错误"<<endl;
                 goto here;
             }
+}
+
+void PrintMap()
+{
+    system("cls");
+    ifstream ifile;
+    ifile.open("map.txt",ios::in);
+
+    if(!ifile.is_open())
+    {
+        cout<<"文件打开失败"<<endl;
+        return;
+    }
+
+    for(string str;getline(ifile,str);)//输出txt文件的所有内容
+    cout<<str<<endl;
+    MapPrintOk=true;
 }
