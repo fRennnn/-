@@ -38,11 +38,12 @@ User user[SIZE];
 class MapNode//顶点信息
 {
     private:
+    int Number;//顶点编号
     string Name;//地图节点名字
     string Imformation;//地图信息，描述这个建筑
-    public:
-    int edgeA,edgeB; //A是这个地
+    
 };
+MapNode Point[15];//15个地图节点
 
 void PrintMap();
 
