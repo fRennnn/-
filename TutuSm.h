@@ -11,16 +11,9 @@ void Menu()
     char i=0;
     int j=0;
     
-    if(!UpOrDown)
-    cout<<"\t\t菜单                               当前为游客状态"<<endl;
-    else
-    {
-        cout<<"\t\t菜单                               当前为管理员状态"<<endl;
-        
-        cout<<"                                       当前UID:"<<user[Location].phone<<endl;//使用隐藏密码输入会导致uid错乱(已解决)
-    }
+   
     
-    
+    cout<<"\t\t\t菜单"<<endl;
     
     if(MapPrintOk==false)
     cout<<"1 -- 显示地图"<<endl;
@@ -41,7 +34,16 @@ void Menu()
     
     cout<<"6 -- 账号系统"<<endl;
    
-    cout<<"7 -- 退出系统"<<endl;
+    cout<<"7 -- 退出系统";
+
+     if(!UpOrDown)
+    cout<<"\t\t                                 当前为游客状态"<<endl;
+    else
+    {
+        cout<<"\t\t                                 当前为管理员状态"<<endl;
+        
+        cout<<"\t\t\t                                 当前UID:"<<user[Location].phone<<endl;//使用隐藏密码输入会导致uid错乱(已解决)
+    }
 
    
     i=getch();
@@ -444,7 +446,6 @@ void User::Login()
             }
 }
   /*
-  小组作业？个人作业！
        　  　▃▆█▇▄▖
 　 　 　 ▟◤▖　　　◥█▎
    　 ◢◤　 ▐　　　 　▐▉
