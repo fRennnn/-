@@ -523,7 +523,7 @@ void ChangeMapImf(int i)
     int Number1;//顶点编号
     string Name1;//地图节点名字
     string Imformation1;//地图信息，描述这个建筑
-    ifs.open("Node.txt",ios::binary|ios::out|ios::in);
+    ifs.open("Node.txt",ios::binary|ios::out|ios::in);//把node给tmp
     ofs.open("tmp.txt",ios::binary|ios::out);
     while(ifs>>Number1&&ifs>>Name1&&ifs>>Imformation1)//将Node文件复制给tmp文件
     {
@@ -552,19 +552,22 @@ void ChangeMapImf(int i)
     ifs.close();
     ofs.close();
 
-   
-    ofstream ofs1;
-    ifstream ifs1;
-    ifs1.open("tmp.txt",ios::binary|ios::out);
-    ofs1.open("Node.txt",ios::binary|ios::out|ios::in);
-    while(ifs1>>Number1>>Name1>>Imformation1)//再把tep文件给Node文件
+    ifs.open("tmp.txt",ios::binary|ios::out|ios::in);
+    ofs.open("Node.txt",ios::binary|ios::out);
+    while(ifs>>Number1>>Name1>>Imformation1)//再把tep文件给Node文件
     {
-        ofs1<<Number1<<endl;
-        ofs1<<Name1<<endl;
-        ofs1<<Imformation1<<endl;
+        ofs<<Number1<<endl;
+        ofs<<Name1<<endl;
+        ofs<<Imformation1<<endl;
     }
-    ofs1.close();
-    ifs1.close();//但愿成功   
+    ofs.close();
+    ifs.close();//但愿成功   
+    /*
+    ifs.open("tmp.txt",ios::binary|ios::out|ios::in);//对的
+    ofs.open("Node.txt",ios::binary|ios::out);
+      
+    ifs1.open("tmp.txt",ios::binary|ios::out);//错的
+    ofs1.open("Node.txt",ios::binary|ios::out|ios::in);*/
 }
 
 MGraph::MGraph()//初始化邻接矩阵 
