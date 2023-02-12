@@ -446,16 +446,16 @@ void User::Login()
             }
 }
   /*
-       　  　▃▆█▇▄▖
-　 　 　 ▟◤▖　　　◥█▎
-   　 ◢◤　 ▐　　　 　▐▉
-　 ▗◤　　　▂　▗▖　　▕█▎
-　◤　▗▅▖◥▄　 ▀◣　　█▊
-▐　▕▎◥▖◣◤　　　　◢██
-█◣　◥▅█▀　　　　▐██◤
-▐█▙▂　　     　◢██◤
+       　  　▃▆█▇▄?
+　 　 　 ?◤?　　　◥█▎
+   　 ◢◤　 ?　　　 　?▉
+　 ?◤　　　▂　??　　▕█▎
+　◤　?▅?◥▄　 ?◣　　█▊
+?　▕▎◥?◣◤　　　　◢██
+█◣　◥▅█?　　　　?██◤
+?█?▂　　     　◢██◤
 ◥██◣　　　　◢▄◤
- 　　▀██▅▇▀
+ 　　?██▅▇?
  */
 void PrintMap()
 {
@@ -493,6 +493,7 @@ void MapRead()
         ifile >> Point[i].Name;
         ifile >> Point[i].Imformation;
     }
+    ifile.close();
 }
 
 void MapCheck(int i)
@@ -500,4 +501,93 @@ void MapCheck(int i)
     int position=i-1;
     cout<<Point[position].Name<<endl;
     cout<<Point[position].Imformation<<endl;
+}
+
+MGraph::MGraph()//初始化邻接矩阵 
+{
+	ifstream ifile;
+    ifile.open("Node.txt",ios::in);
+
+    if(!ifile.is_open())
+    {
+        cout<<"文件打开失败"<<endl;
+        system("pause>nul");
+        return;
+    }
+
+    for(int i=0;!ifile.eof()&&i<50;i++)
+    {
+        ifile >> vertex[i].Number;
+        ifile >> vertex[i].Name;
+        ifile >> vertex[i].Imformation;
+        vertexNum=i;
+    }
+	ifile.close();
+	for (int i = 0; i < maxsize; i++)          //初始化邻接矩阵
+ 		for (int j = 0; j < maxsize; j++)
+			edge[i][j] = INFINITY;            //假设边上权值最大是32767
+	for(int i=0;i<vertexNum;i++)
+		edge[i][i]=0;
+	
+    string fileString[50];	//静态定义文件字符串数组
+    string subString1[50];  //静态定义三个子字符串数组
+    string subString2[50];
+    string subString3[50];
+ 	edgeNum = inputString("distance.txt",fileString);
+ 	 for(int i = 0; i <edgeNum; i++)
+ 	f2(fileString[i], subString1[i], subString2[i], subString3[i]);
+ 	for(int r = 0; r < edgeNum; r++)
+	{   
+		edge[f1(subString1[r])][f1(subString2[r])] = f1(subString3[r]);//由于是无向图,因而路径是双向的
+		edge[f1(subString2[r])][f1(subString1[r])] = f1(subString3[r]);
+	}
+
+} 
+
+
+int inputString(char *filename,string str[])//将filename所指文件按行输出到数组str[]中，返回表达式的实际个数
+{
+    
+    ifstream infile;
+	infile.open(filename,ios::in);//功能：定义输入文件流对象infile，打开磁盘filename所指文件，并使filename所指文件与流对象infile关联。
+    if(!infile.is_open())//如果infile关联的文件打开失败，infile返回0
+    {
+        cout<<"文件打开出错！"<<endl; //输出错误信息
+        system("pause>nul");
+        exit(0);
+    }
+    int i=0;
+    while(!infile.eof()) //infile关联的文件尚未到文件尾
+    {
+
+        getline(infile,str[i]); //从输入流对象infile所关联的文件读取一行存入str[i]
+        i++;
+    }
+    infile.close();     //关闭infile所关联的磁盘文件
+    return i - 1;           //返回表达式的实际个数
+}
+
+int f1(string str)//返回str中的数字字符串所对应的整数
+{
+    int result = 0;
+	for(unsigned int i = 0; i < str.length(); i++)//for循环遍历字符串
+	{
+		if(str[i] >= '0' && str[i] <= '9')
+		{
+			result = result * 10 + str[i] - 48;//根据ASCII,00110000~00111001表示'0'~'9'及十进制的规则
+		}
+	}
+	return result;	//返回字符串所对应的整数
+}
+
+void f2(string str, string &str1, string &str2, string &str3)//使用string类的find函数分隔字符串
+{
+    int m = str.find('>');
+    int n = str.find('>', m + 1);
+    for(int i = 0; i < str.length(); i++) //for循环
+    {
+        if(i < m){str1 += str[i];}                 //读编号
+        else if(i > m && i < n){str2 += str[i];}   //读编号
+        else if(i > n){str3 += str[i];}            //读两个景点之间的距离
+    }
 }
