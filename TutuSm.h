@@ -11,6 +11,8 @@ void Menu()
     char i=0;
     int j=0;
     
+   
+    
     cout<<"\t\t\t菜单"<<endl;
     
     if(MapPrintOk==false)
@@ -70,7 +72,7 @@ void Menu()
         cout<<"请输入地图编号:"<<endl;
         cin>>x;
         MapCheck(x);
-        system("pause>nul");
+        system("pause");
     }break;
     case '4':
     {
@@ -81,7 +83,10 @@ void Menu()
     {
         if(IsVip)//简单的判断是不是VIP
         {
-            cout<<"I am 5";system("pause>nul");
+            int x;
+            cout<<"输入地图编号:";
+            cin>>x;
+            ChangeMapImf(x);
         }
         else
         cout<<"没有权限 > <";system("pause>nul");
