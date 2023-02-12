@@ -13,7 +13,7 @@ using namespace std;
 #define maxsize 50//最大景点数 
 #define INFINITY 32767     //INFINITY表示极大值、无穷大
 int scount = 0;
-bool IsVip = true;//判断是不是VIP
+bool IsVip = false;//判断是不是VIP
 bool ZHUANGTAI = false;//判断文件是否成功打开
 bool UpOrDown = false;//判断用户有无上号
 bool MapPrintOk = false;//判断地图是否打印出来
