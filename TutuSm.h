@@ -104,7 +104,7 @@ void Menu()
         break;
     }
 //--------------------------------------------
-if(!MapPrintOk)//如果地图已经打开就别清屏了
+if(MapPrintOk==false)//如果地图已经打开就别清屏了
     system("cls");
 }
 void CountMenu()
@@ -501,6 +501,67 @@ void MapCheck(int i)
     int position=i-1;
     cout<<Point[position].Name<<endl;
     cout<<Point[position].Imformation<<endl;
+}
+
+void ChangeMapImf(int i)
+{
+    /*首先是需要查找到特定数据的所在，
+    然后打开原本存有数据的文件test.txt与中间文件tmp.txt，
+    随后通过while语句循环读取test.txt的数据，并逐一写入tmp.txt中，
+    当读到与特定数据一致的数据时，通过重新定义变量的值并将重定义后的数据写入文件tmp.txt中。
+    这样就能够实现对特定数据的修改，
+    但还有一步便是将tmp.txt的数据写入test.txt中，
+    从而实现在原文件中修改特定数据。
+    */
+
+    int position=i-1;//地图编号
+    ifstream ifs;
+    ofstream ofs;
+    int Number1;//顶点编号
+    string Name1;//地图节点名字
+    string Imformation1;//地图信息，描述这个建筑
+    ifs.open("Node.txt",ios::binary|ios::out|ios::in);
+    ofs.open("tmp.txt",ios::binary|ios::out);
+    while(ifs>>Number1&&ifs>>Name1&&ifs>>Imformation1)//将Node文件复制给tmp文件
+    {
+        if(Number1==i)
+        {
+         cout<<"原地图信息:"<<Point[position].Name<<" "<<Point[position].Imformation<<endl;
+         cout<<"ESC退出,按任意键开始修改"<<endl;
+         char ch=_getch();
+         if(GetAsyncKeyState(VK_ESCAPE))
+          {
+            system("cls");
+            return;
+          }
+         else
+          {
+           cout<<"修改为:";
+           cin>>Imformation1;
+           Point[position].Imformation=Imformation1;//修改对应地图的信息
+          }
+        }
+        ofs<<Number1<<endl;
+        ofs<<Name1<<endl;
+        ofs<<Imformation1<<endl;
+    }
+    cout<<"修改完毕!"<<endl;
+    ifs.close();
+    ofs.close();
+
+   
+    ofstream ofs1;
+    ifstream ifs1;
+    ifs1.open("tmp.txt",ios::binary|ios::out);
+    ofs1.open("Node.txt",ios::binary|ios::out|ios::in);
+    while(ifs1>>Number1>>Name1>>Imformation1)//再把tep文件给Node文件
+    {
+        ofs1<<Number1<<endl;
+        ofs1<<Name1<<endl;
+        ofs1<<Imformation1<<endl;
+    }
+    ofs1.close();
+    ifs1.close();//但愿成功   
 }
 
 MGraph::MGraph()//初始化邻接矩阵 
