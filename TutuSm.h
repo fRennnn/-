@@ -11,8 +11,6 @@ void Menu()
     char i=0;
     int j=0;
     
-   
-    
     cout<<"\t\t\t菜单"<<endl;
     
     if(MapPrintOk==false)
