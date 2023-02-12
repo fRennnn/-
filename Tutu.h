@@ -64,3 +64,4 @@ void CountMenu();
 void PrintMap();
 void MapCheck(int);// ^ ^
 void MapRead();
+void ChangeMapImf(int);
