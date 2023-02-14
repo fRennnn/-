@@ -19,7 +19,7 @@ bool UpOrDown = false;//判断用户有无上号
 bool MapPrintOk = false;//判断地图是否打印出来
 
 int Location = 0;//用户账号所在的位置
-
+int number = 0; //当前景点数 
 void Menu();
 void gotoxy(int x,int y);
 
@@ -52,8 +52,10 @@ class MGraph //邻接矩阵
 public:
     MGraph();     //构造函数
     ~MGraph( ){ };            //析构函数
+    void Dijkstra(int v,int a,int t);  		//两个景点最短路径
+	int Min(int r[ ], int n);
 private:
- MapNode vertex[maxsize];           //存放图中顶点的数组
+ 	MapNode vertex[maxsize];           //存放图中顶点的数组
     int edge[maxsize][maxsize];           //存放图中边的数组
     int vertexNum, edgeNum;              //图的顶点数和边数
  };
