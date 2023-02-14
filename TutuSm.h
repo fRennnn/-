@@ -562,6 +562,11 @@ void PrintMap()
 void MGraph::MapCheck(int i)
 {
     int position=i-1;
+    if(vertex[position].Name=="")
+    {
+        cout<<"没有相关数据:C";
+    }
+    else
     cout<<vertex[position].Name<<endl;
     cout<<vertex[position].Imformation<<endl;
 }
@@ -661,6 +666,8 @@ MGraph::MGraph()//初始化邻接矩阵
     string subString2[50];
     string subString3[50];
  	edgeNum = inputString("distance.txt",fileString);//返回distance文件的行数，即边的数量
+    edgeNum=0;
+    edgeNum = GetEdgeNum();
  	 for(int i = 0; i <edgeNum; i++)
  	f2(fileString[i], subString1[i], subString2[i], subString3[i]);
  	for(int r = 0; r < edgeNum; r++)
@@ -676,7 +683,6 @@ MGraph::MGraph()//初始化邻接矩阵
 		edge[f1(subString1[r])-1][f1(subString2[r])-1] = f1(subString3[r]);//由于是无向图,因而路径是双向的
 		edge[f1(subString2[r])-1][f1(subString1[r])-1] = f1(subString3[r]);
 	}
-
 } 
 
 
@@ -778,6 +784,7 @@ void NodeImfMenu()
     cout<<"1--增加景点"<<endl;
     cout<<"2--删除景点"<<endl;
     cout<<"3--更新景点"<<endl;
+    cout<<"4--增加边数"<<endl;
 
     int x;
     char cha=_getch();
@@ -802,6 +809,12 @@ void NodeImfMenu()
         cout<<"输入待修改景点的编号:";
         cin>>x;
         a.ChangeMapImf(x);
+    }
+    break;
+    case '4':
+    {
+        cout<<"输入起始地图的编号:";
+        a.EdgeDataChange();
     }
     break;
     default:
@@ -857,7 +870,86 @@ void MGraph::EdgeDataChange()
         system("pause");
         return;
     }
-    ofs<<FirAndSec;
+    ofs<<FirAndSec<<endl;
     ofs.close();
+    a.Update();
     cout<<"已更新数据^ ^";
+}
+
+int MGraph::GetEdgeNum()
+{
+    string tmp;
+    int numBeR;
+    ifstream ReadFile;
+    ReadFile.open("distance.txt",ios::in);
+    if(ReadFile.fail())
+    {
+        cout<<"打开文件失败";
+        system("pause");
+        exit(0);
+    }
+    else
+    {
+        while(getline(ReadFile,tmp))
+        {
+            if(tmp=="")//忽略空行
+            continue;
+            else
+            {
+            numBeR++;
+            //cout<<tmp<<endl;
+            }
+        }        
+    }
+    ReadFile.close();
+    return numBeR/2+1;//我也不知道为什么numBeR是行数的2倍 :C
+}
+
+void MGraph::Update()
+{
+    ifstream ifile;
+    ifile.open("Node.txt",ios::in);//更新咯
+
+    if(!ifile.is_open())
+    {
+        cout<<"文件打开失败"<<endl;
+        system("pause>nul");
+        return;
+    }
+
+    for(int i=0;!ifile.eof()&&i<50;i++)
+    {
+        ifile >> vertex[i].Number;
+        ifile >> vertex[i].Name;
+        ifile >> vertex[i].Imformation;
+        vertexNum=i;
+        number=vertexNum;
+    }
+	ifile.close();
+
+	for (int i = 0; i < maxsize; i++)          //初始化邻接矩阵
+ 		for (int j = 0; j < maxsize; j++)
+			edge[i][j] = INFINITY;            //假设边上权值最大是32767
+	
+    string fileString[50];	//静态定义文件字符串数组
+    string subString1[50];  //静态定义三个子字符串数组
+    string subString2[50];
+    string subString3[50];
+ 	edgeNum = inputString("distance.txt",fileString);//返回distance文件的行数，即边的数量
+    edgeNum = GetEdgeNum();
+ 	 for(int i = 0; i <edgeNum; i++)
+ 	f2(fileString[i], subString1[i], subString2[i], subString3[i]);
+ 	for(int r = 0; r < edgeNum; r++)
+	{   
+        if((f1(subString1[r])-1)>vertexNum||(f1(subString2[r])-1)>vertexNum)//检查字符的数字是否超出顶点数
+        {
+            cout<<"数据错误,请进行数据检查"<<endl;
+            cout<<"位于数组["<<r<<"]的元素出错,请修改!"<<endl;;
+            system("pause");
+            return;
+        }
+
+		edge[f1(subString1[r])-1][f1(subString2[r])-1] = f1(subString3[r]);//由于是无向图,因而路径是双向的
+		edge[f1(subString2[r])-1][f1(subString1[r])-1] = f1(subString3[r]);
+	}
 }
