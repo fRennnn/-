@@ -841,7 +841,7 @@ void MGraph::CreatNewNode()
     vertex[NUM].Name=name;
     vertex[NUM].Imformation=imf;
     ofstream ofs;
-    ofs.open("Node.txt",ios::out|ios::app);
+    ofs.open("Node.txt",ios::binary|ios::out|ios::app);
     if(!ofs.is_open())
     {
         cout<<"文件打开失败"<<endl;
@@ -863,7 +863,7 @@ void MGraph::EdgeDataChange()
     cout<<"请输入:";
     cin>>FirAndSec;
     FirAndSec.erase(remove(FirAndSec.begin(),FirAndSec.end(),' '),FirAndSec.end());
-    ofs.open("distance.txt",ios::out|ios::app);
+    ofs.open("distance.txt",ios::binary|ios::out|ios::app);
     if(!ofs.is_open())
     {
         cout<<"文件打开失败"<<endl;
