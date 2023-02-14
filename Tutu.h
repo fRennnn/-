@@ -56,15 +56,16 @@ class MGraph //邻接矩阵
 public:
     MGraph();     //构造函数
     ~MGraph( ){ };            //析构函数
-    void Update();
+    void Update();//更新数据
     void Dijkstra(int v,int a,int t);  		//两个景点最短路径
 	int Min(int r[ ], int n);
     void MapCheck(int);// ^ ^
     void MapRead();
     void ChangeMapImf(int);
-    void DeleteNode(int);
-    void CreatNewNode(); 
-    void EdgeDataChange();
+    void DeleteNode(int);//删除节点
+    void CreatNewNode(); //创造新节点
+    void EdgeDataChange();//对节点的边操作
+    int GetEdgeNum();    //获取当前txt文件边的数量
     int GetvertexNum(){return vertexNum++;}
 private:
  	MapNode vertex[maxsize];           //存放图中顶点的数组
@@ -83,7 +84,7 @@ void PrintMenu();
 void NodeImfMenu();
 
 int asdasd();
-int asdasd()//测试用的，不用理他
+int asdasd()
 {
     return TEST++;
 }
