@@ -63,7 +63,16 @@ void Menu()
     }break;
     case '2':
     {
-        cout<<"I am 2"<<endl;
+        MGraph a;
+        int i,k;
+    	cout<<"请按从左（出发）到右（目的地）顺序分别输入要查询的两个景点的编号：";
+    	cin>>i>>k;
+    	while(i==k||i>number||k>number)
+    	{
+        	cout<<"景点编号不能输入一致或编号错误！请重新输入::"<<endl; 
+        	cin>>i>>k;
+		}
+		a.Dijkstra(i,k,2);
         system("pause>nul");
     }break;
     case '3':
@@ -76,8 +85,17 @@ void Menu()
     }break;
     case '4':
     {
-        cout<<"I am 4"<<endl;
-        system("pause>nul");
+         MGraph a;
+        int i,k;
+    	cout<<"请按从左（出发）到右（目的地）顺序分别输入要查询的两个景点的编号：";
+    	cin>>i>>k;
+    	while(i==k||i>number||k>number)
+    	{
+        	cout<<"景点编号不能输入一致或编号错误！请重新输入::"<<endl; 
+        	cin>>i>>k;
+		}
+		a.Dijkstra(i,k,1);
+		system("pause>nul");
     }break;
     case '5':
     {
@@ -108,7 +126,7 @@ void Menu()
     }
 //--------------------------------------------
 if(MapPrintOk==false)//如果地图已经打开就别清屏了
-    system("cls");
+     system("cls");
 }
 void CountMenu()
 {
@@ -587,7 +605,7 @@ MGraph::MGraph()//初始化邻接矩阵
         ifile >> vertex[i].Number;
         ifile >> vertex[i].Name;
         ifile >> vertex[i].Imformation;
-        vertexNum=i;
+        number=vertexNum=i;
     }
 	ifile.close();
 	for (int i = 0; i < maxsize; i++)          //初始化邻接矩阵
@@ -657,4 +675,43 @@ void f2(string str, string &str1, string &str2, string &str3)//使用string类�
         else if(i > m && i < n){str2 += str[i];}   //读编号
         else if(i > n){str3 += str[i];}            //读两个景点之间的距离
     }
+}
+
+void MGraph :: Dijkstra(int v,int a,int t)                      //从源点v出发
+{
+  	int i,k, num, dist[maxsize],distance[maxsize];
+  	string path[maxsize];
+	for (i = 0; i < vertexNum; i++)            //初始化数组dist和path
+	{
+   		dist[i] = edge[v-1][i];
+   		if (dist[i] != 32767)                    //假设32767为边上权的最大值
+			path[i] = vertex[v-1].Name +"->"+ vertex[i].Name;       //+为字符串连接操作
+   		else path[i] = "";
+   	}
+	for (num = 1; num < vertexNum; num++)
+	{
+		k = Min(dist, vertexNum);      //在dist数组中找最小值并返回其下标
+		distance[k]=dist[k];
+  		for (i = 0; i < vertexNum; i++)             //修改数组dist和path
+    		if (dist[i] > dist[k] + edge[k][i]) {
+       			dist[i] = dist[k] + edge[k][i];
+       			path[i] = path[k] + "->"+vertex[i].Name;         //+为字符串连接操作
+    		}
+		dist[k] = 0;                            //将顶点k加到集合S中
+	}
+	if(t==1)
+	cout<<vertex[v-1].Name +"->"+ vertex[a-1].Name<<"的最短距离:"<< distance[a-1]<<endl;
+	if(t==2)
+	cout<<vertex[v-1].Name +"->"+ vertex[a-1].Name<<"的最短路径:"<< path[a-1]<<endl;
+}
+
+int MGraph ::Min(int r[ ], int n)
+{
+	int index = 0, min = 32767;
+	for (int i = 0; i < n; i++)
+		if (r[i] != 0 && r[i] < min)
+		{
+			min = r[i]; index = i;		
+		}
+	return index;
 }
