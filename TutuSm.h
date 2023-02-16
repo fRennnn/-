@@ -102,8 +102,11 @@ void Menu()
     case '2':
     {
         int i,k;
-    	cout<<"请按从左（出发）到右（目的地）顺序分别输入要查询的两个景点的编号：";
-    	cin>>i>>k;
+    	cout<<"请按从左（出发）到右（目的地）顺序分别输入要查询的两个景点的编号："<<endl;
+        cout<<"出发地编号:";
+    	cin>>i;
+        cout<<"目的地编号:";
+        cin>>k;
     	while(i==k||i>number||k>number)
     	{
         	cout<<"景点编号不能输入一致或编号错误！请重新输入::"<<endl; 
@@ -116,7 +119,7 @@ void Menu()
     case '3':
     {
         int x=0;
-        cout<<"请输入地图编号:"<<endl;
+        cout<<"请输入地图编号:";
         cin>>x;
         a.MapCheck(x);
         cout<<"按任意键返回菜单";
@@ -125,8 +128,11 @@ void Menu()
     case '4':
     {
         int i,k;
-    	cout<<"请按从左（出发）到右（目的地）顺序分别输入要查询的两个景点的编号：";
-    	cin>>i>>k;
+    	cout<<"请按从左（出发）到右（目的地）顺序分别输入要查询的两个景点的编号："<<endl;
+        cout<<"出发地编号:";
+    	cin>>i;
+        cout<<"目的地编号:";
+        cin>>k;
     	while(i==k||i>number||k>number)
     	{
         	cout<<"景点编号不能输入一致或编号错误！请重新输入::"<<endl; 
@@ -564,11 +570,13 @@ void MGraph::MapCheck(int i)
     int position=i-1;
     if(vertex[position].Name=="")
     {
-        cout<<"没有相关数据:C";
+        cout<<"没有相关数据:C"<<endl;
     }
     else
-    cout<<vertex[position].Name<<endl;
-    cout<<vertex[position].Imformation<<endl;
+    {
+    cout<<"景点名字:"<<vertex[position].Name<<endl;
+    cout<<"景点介绍:"<<vertex[position].Imformation<<endl;
+    }
 }
 
 void MGraph::ChangeMapImf(int i)
@@ -596,19 +604,48 @@ void MGraph::ChangeMapImf(int i)
         {
          cout<<"原地图名字:"<<vertex[position].Name<<endl;
          cout<<"原地图介绍:"<<vertex[position].Imformation<<endl;
+         cout<<endl;
+         cout<<"1--修改地图名字"<<endl;
+         cout<<"2--修改地图介绍"<<endl;
+         cout<<"3--两者都要?"<<endl;
          cout<<"ESC退出\t按任意键开始修改"<<endl;
          char ch=_getch();
-         if(GetAsyncKeyState(VK_ESCAPE))
+         if(GetAsyncKeyState(VK_ESCAPE))//ESC键退出
           {
             system("cls");
             return;
           }
          else
           {
-           cout<<"修改为:";
-           cin>>Imformation1;
-           vertex[position].Imformation=Imformation1;//修改对应地图的信息
+           switch(ch)
+           {
+            case '1':
+            {
+            cout<<"修改为:";
+            cin>>Name1;
+            vertex[position].Name=Name1; 
+            }break;
+            case '2':
+            {
+            cout<<"修改为:";
+            cin>>Imformation1;
+            vertex[position].Imformation=Imformation1;//修改对应地图的信息
+            }break;
+            case '3':
+            {
+            cout<<"修改地图名字为:";
+            cin>>Name1;
+            vertex[position].Name=Name1; 
+            cout<<"修改地图介绍为:";
+            cin>>Imformation1;
+            vertex[position].Imformation=Imformation1;//修改对应地图的信息
+            }break;
+            default:{
+                cout<<"输入错误,返回菜单";
+                return;
+            }
           }
+        }
         }
         ofs<<Number1<<endl;
         ofs<<Name1<<endl;
@@ -617,7 +654,7 @@ void MGraph::ChangeMapImf(int i)
     cout<<"修改完毕!"<<endl;
     ifs.close();
     ofs.close();
-
+    
     ifs.open("tmp.txt",ios::binary|ios::out|ios::in);
     ofs.open("Node.txt",ios::binary|ios::out);
     while(ifs>>Number1>>Name1>>Imformation1)//再把tep文件给Node文件
@@ -665,8 +702,7 @@ MGraph::MGraph()//初始化邻接矩阵
     string subString1[50];  //静态定义三个子字符串数组
     string subString2[50];
     string subString3[50];
- 	edgeNum = inputString("distance.txt",fileString);//返回distance文件的行数，即边的数量
-    edgeNum=0;
+ 	inputString("distance.txt",fileString);//返回distance文件的行数，即边的数量
     edgeNum = GetEdgeNum();
  	 for(int i = 0; i <edgeNum; i++)
  	f2(fileString[i], subString1[i], subString2[i], subString3[i]);
@@ -686,7 +722,7 @@ MGraph::MGraph()//初始化邻接矩阵
 } 
 
 
-int inputString(char *filename,string str[])//将filename所指文件按行输出到数组str[]中，返回表达式的实际个数
+void inputString(char *filename,string str[])//将filename所指文件按行输出到数组str[]中，返回表达式的实际个数
 { 
     ifstream infile;
 	infile.open(filename,ios::in);//功能：定义输入文件流对象infile，打开磁盘filename所指文件，并使filename所指文件与流对象infile关联。
@@ -703,7 +739,7 @@ int inputString(char *filename,string str[])//将filename所指文件按行输�
         i++;
     }
     infile.close();     //关闭infile所关联的磁盘文件
-    return i - 1;       //返回表达式的实际个数,这里的i返回有问题
+           //返回表达式的实际个数,这里的i返回有问题
 }
 
 int f1(string str)//返回str中的数字字符串所对应的整数
@@ -730,11 +766,23 @@ void f2(string str, string &str1, string &str2, string &str3)//使用string类�
         else if(i > n){str3 += str[i];}            //读两个景点之间的距离
     }
 }
+void f2(string str, string &str1, string &str2)//使用string类的find函数分隔字符串
+{
+    int m = str.find('>');
+    int n = str.find('>', m + 1);
+    for(int i = 0; i < str.length(); i++) //for循环
+    {
+        if(i < m){str1 += str[i];}                 //读第一个地图编号
+        else if(i > m && i < n){str2 += str[i];}   //读第二个地图编号
+    }
+}
 
 void MGraph :: Dijkstra(int v,int a,int MODE)                      //从源点v出发
 {
+    int check=0;
   	int i,k, num, dist[maxsize],distance[maxsize];
   	string path[maxsize];
+    bool A=false,B=false;
 	for (i = 0; i < vertexNum; i++)            //初始化数组dist和path
 	{
    		dist[i] = edge[v-1][i];
@@ -742,6 +790,41 @@ void MGraph :: Dijkstra(int v,int a,int MODE)                      //从源点v�
 			path[i] = vertex[v-1].Name +"->"+ vertex[i].Name;       //+为字符串连接操作
    		else path[i] = "";
    	}
+    while(1)//这里是检查两个点是否至少有一边，主要是检查能不能到达的问题
+    {
+        if(A==false)
+        {
+        if(edge[v-1][check]!=INFINITY)//如果有边
+       {
+        A=true;
+       }
+       else
+       {
+        A=false;
+       }
+        }
+
+         if(B==false)
+       {
+        if(edge[a-1][check]!=INFINITY)//如果有边
+       {
+        B=true;
+       }
+       else
+       {
+        B=false;
+       }
+       }
+
+        if(A==true&&B==true)break;//如果两点都有路的话
+        else check++;
+        if(check==vertexNum)
+        {
+        cout<<"该地点没有路";
+        system("pause");
+        return;
+        }
+    }
 	for (num = 1; num < vertexNum; num++)
 	{
 		k = Min(dist, vertexNum);      //在dist数组中找最小值并返回其下标
@@ -783,8 +866,9 @@ void NodeImfMenu()
     cout<<"\t\t\t菜单"<<endl;
     cout<<"1--增加景点"<<endl;
     cout<<"2--删除景点"<<endl;
-    cout<<"3--更新景点"<<endl;
+    cout<<"3--修改景点"<<endl;
     cout<<"4--增加边数"<<endl;
+    cout<<"5--删除特定边"<<endl;
 
     int x;
     char cha=_getch();
@@ -802,6 +886,9 @@ void NodeImfMenu()
         cout<<"请输入待删除景点的编号:";
         cin>>x;
         a.DeleteNode(x);
+        a.DATASAVE(0);
+        a.DATASAVE(1);
+        a.Update();
     }
     break;
     case '3':
@@ -817,6 +904,11 @@ void NodeImfMenu()
         a.EdgeDataChange();
     }
     break;
+    case '5':
+    {
+        cout<<"输入特定边 (编号A>编号B>) :";
+        a.DeleteEdge();
+    }break;
     default:
         break;
     }
@@ -824,7 +916,67 @@ void NodeImfMenu()
 
 void MGraph::DeleteNode(int x)
 {
+    string _Number=to_string(x);//将数字赋值给string;
+    
+    int position=x-1;//地图编号
+    ifstream ifs;
+    ofstream ofs;
+    string str;
+    string name1,number1,imf1;//记录需要删除的数据
+    string Fir,Sec;//记录边是否相等
+    name1=vertex[position].Name;
+    number1=vertex[position].Number;
+    imf1=vertex[position].Imformation;
+    vertex[position].Name="NULL";
+    vertex[position].Number=0;
+    vertex[position].Imformation="NULL";
+    ifs.open("Node.txt",ios::binary|ios::out|ios::in);//把node给tmp
+    ofs.open("tmp.txt",ios::binary|ios::out);
+    while(getline(ifs,str))
+    {
+        if(!str.compare(number1))continue;//对比数据是否一致，一致则跳过
+        if(!str.compare(name1))continue;
+        if(!str.compare(imf1))continue;
+        ofs<<str<<endl;
+    }
+    ifs.close();
+    ofs.close();
+    ifs.open("tmp.txt",ios::binary|ios::out|ios::in);
+    ofs.open("Node.txt",ios::binary|ios::out);
+    while(getline(ifs,str))//再把tep文件给Node文件
+    {
+        ofs<<str<<endl;
+    }
+    ofs.close();
+    ifs.close();
+//------------------下面处理边
+    ifs.open("distance.txt",ios::binary|ios::out|ios::in);
+    ofs.open("tmp.txt",ios::binary|ios::out);
+    while(getline(ifs,str))
+    {
+        Fir.clear();
+        Sec.clear();
 
+        f2(str,Fir,Sec);                        //使用string类的find函数分隔字符串
+
+        if(!Fir.compare(_Number)||!Sec.compare(_Number))//返回str中的数字字符串所对应的整数
+        { 
+            continue;
+        }
+        ofs<<str<<endl;
+    }
+    ifs.close();
+    ofs.close();
+    ifs.open("tmp.txt",ios::binary|ios::out|ios::in);
+    ofs.open("distance.txt",ios::binary|ios::out);
+    while(getline(ifs,str))//再把tep文件给distance文件
+    {
+        ofs<<str<<endl;
+    }
+    ofs.close();
+    ifs.close();
+//----------------
+    cout<<"删除成功"<<endl;
 }
 
 void MGraph::CreatNewNode()
@@ -853,16 +1005,26 @@ void MGraph::CreatNewNode()
     ofs<<vertex[NUM].Imformation<<endl;
     ofs.close();
     cout<<"输入成功^ ^"<<endl;
+    a.DATASAVE(0);
 }
 
 void MGraph::EdgeDataChange()
 {
     string FirAndSec;
     ofstream ofs;
+    cout<<"注意:编号大于景点数的数据不被记录"<<endl;
     cout<<"格式为(地图A编号)>(地图B编号)>(权值):"<<endl;
+    do{
     cout<<"请输入:";
     cin>>FirAndSec;
     FirAndSec.erase(remove(FirAndSec.begin(),FirAndSec.end(),' '),FirAndSec.end());
+    if((FirAndSec.find('>')==-1))
+    {
+        cout<<"请按格式输入!"<<endl;
+    }
+    else 
+    break;
+    }while(1);
     ofs.open("distance.txt",ios::binary|ios::out|ios::app);
     if(!ofs.is_open())
     {
@@ -872,6 +1034,7 @@ void MGraph::EdgeDataChange()
     }
     ofs<<FirAndSec<<endl;
     ofs.close();
+    a.DATASAVE(1);
     a.Update();
     cout<<"已更新数据^ ^";
 }
@@ -935,7 +1098,7 @@ void MGraph::Update()
     string subString1[50];  //静态定义三个子字符串数组
     string subString2[50];
     string subString3[50];
- 	edgeNum = inputString("distance.txt",fileString);//返回distance文件的行数，即边的数量
+ 	inputString("distance.txt",fileString);//返回distance文件的行数，即边的数量
     edgeNum = GetEdgeNum();
  	 for(int i = 0; i <edgeNum; i++)
  	f2(fileString[i], subString1[i], subString2[i], subString3[i]);
@@ -952,4 +1115,184 @@ void MGraph::Update()
 		edge[f1(subString1[r])-1][f1(subString2[r])-1] = f1(subString3[r]);//由于是无向图,因而路径是双向的
 		edge[f1(subString2[r])-1][f1(subString1[r])-1] = f1(subString3[r]);
 	}
+}
+
+void MGraph::DATASAVE(int ModeSetting)
+{
+    if(ModeSetting==1)//1是保存边数据
+    {
+    ifstream ifs;
+    ofstream ofs;
+    string str;
+    string Fir,Sec;//记录边是否相等
+    ifs.open("distance.txt",ios::binary|ios::out|ios::in);//把node给tmp
+    if(!ifs.is_open())
+    {
+        cout<<"打开文件失败"<<endl;
+        system("pause");
+        return;
+    }
+    ofs.open("tmp.txt",ios::binary|ios::out);
+    if(!ofs.is_open())
+    {
+        cout<<"打开文件失败"<<endl;
+        system("pause");
+        return;
+    }
+    while(ifs>>str)
+    {
+        ofs<<str<<endl;
+    }
+    ifs.close();
+    ofs.close();
+    ifs.open("tmp.txt",ios::binary|ios::out|ios::in);
+    if(!ifs.is_open())
+    {
+        cout<<"打开文件失败"<<endl;
+        system("pause");
+        return;
+    }
+    ofs.open("distance.txt",ios::binary|ios::out);
+    if(!ofs.is_open())
+    {
+        cout<<"打开文件失败"<<endl;
+        system("pause");
+        return;
+    }
+    while(getline(ifs,str))
+    {
+        Fir.clear();
+        Sec.clear();
+        f2(str,Fir,Sec); 
+        if(f1(Fir)>vertexNum||f1(Sec)>vertexNum)continue;//编号大于景点数的不被写入文件
+        ofs<<str<<endl;
+    }
+    ofs.close();
+    ifs.close();
+    }
+    else
+    {
+    ifstream ifs;
+    ofstream ofs;
+    int Number1;//顶点编号
+    string Name1;//地图节点名字
+    string Imformation1;//地图信息，描述这个建筑
+    ifs.open("Node.txt",ios::binary|ios::out|ios::in);//把node给tmp
+    if(!ifs.is_open())
+    {
+        cout<<"打开文件失败"<<endl;
+        system("pause");
+        return;
+    }
+    ofs.open("tmp.txt",ios::binary|ios::out);
+    if(!ofs.is_open())
+    {
+        cout<<"打开文件失败"<<endl;
+        system("pause");
+        return;
+    }
+    while(ifs>>Number1&&ifs>>Name1&&ifs>>Imformation1)//将Node文件复制给tmp文件
+    {
+        ofs<<Number1<<endl;
+        ofs<<Name1<<endl;
+        ofs<<Imformation1<<endl;
+    }
+    ifs.close();
+    ofs.close();
+    ifs.open("tmp.txt",ios::binary|ios::out|ios::in);
+    if(!ifs.is_open())
+    {
+        cout<<"打开文件失败"<<endl;
+        system("pause");
+        return;
+    }
+    ofs.open("Node.txt",ios::binary|ios::out);
+    if(!ofs.is_open())
+    {
+        cout<<"打开文件失败"<<endl;
+        system("pause");
+        return;
+    }
+    while(ifs>>Number1>>Name1>>Imformation1)//再把tep文件给Node文件
+    {
+        ofs<<Number1<<endl;
+        ofs<<Name1<<endl;
+        ofs<<Imformation1<<endl;
+    }
+    ofs.close();
+    ifs.close();
+    }
+}
+
+void MGraph::DeleteEdge()
+{
+    bool Mode=false;
+    string FirAndSec,str,Fir,Sec,One,Two;
+    do{
+    cin>>FirAndSec;
+    FirAndSec.erase(remove(FirAndSec.begin(),FirAndSec.end(),' '),FirAndSec.end());
+    if((FirAndSec.find('>')==-1))
+    {
+        cout<<"请按格式输入!"<<endl;
+    }
+    else 
+    break;
+    }while(1);
+    f21(FirAndSec,Fir,Sec);//记录输入的字符
+    ifstream ifs;
+    ofstream ofs;
+    ifs.open("distance.txt",ios::binary|ios::out|ios::in);
+    ofs.open("tmp.txt",ios::binary|ios::out);
+    
+    while(getline(ifs,str))//找边
+    {
+        One.clear();
+        Two.clear();
+        f2(str,One,Two);
+         if(!One.compare(Fir)&&!Two.compare(Sec))//找到的话
+         {
+            cout<<"该边详细数据为(编号>编号>权值):"<<str<<endl;
+            system("pause>nul");
+            FirAndSec=str;//把具体的复制给它
+            Mode=true;
+            continue;
+         }
+         ofs<<str<<endl;   
+    }
+    ifs.close();
+    ofs.close();
+
+
+    ifs.open("tmp.txt",ios::binary|ios::out|ios::in);
+    ofs.open("distance.txt",ios::binary|ios::out);
+    while(getline(ifs,str))//再把tep文件给distance文件
+    {
+        ofs<<str<<endl;
+    }
+    ofs.close();
+    ifs.close();
+    if(Mode!=true)
+    {
+        cout<<"没找到改条边,试着编号顺序反过来写"<<endl;
+        system("pause>nul");
+        return;
+    }
+    else
+    {
+        cout<<"删除成功"<<endl;
+    }
+    a.DATASAVE(1);
+    a.DATASAVE(0);
+    a.Update();
+}
+
+void f21(string str, string &str1, string &str2)//使用string类的find函数分隔字符串
+{
+    int m = str.find('>');
+    int n = str.length();
+    for(int i = 0; i < str.length(); i++) //for循环
+    {
+        if(i < m){str1 += str[i];}                 //读第一个地图编号
+        else if(i > m && i < n){str2 += str[i];}   //读第二个地图编号
+    }
 }
