@@ -906,7 +906,7 @@ void NodeImfMenu()
     break;
     case '5':
     {
-        cout<<"输入特定边 (编号A>编号B>) :";
+        cout<<"输入特定边 ( 编号A>编号B ) :";
         a.DeleteEdge();
     }break;
     default:
@@ -1286,7 +1286,7 @@ void MGraph::DeleteEdge()
     a.Update();
 }
 
-void f21(string str, string &str1, string &str2)//使用string类的find函数分隔字符串
+void f21(string str, string &str1, string &str2)//主要为了输入格式好看一些
 {
     int m = str.find('>');
     int n = str.length();
