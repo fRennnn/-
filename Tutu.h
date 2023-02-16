@@ -8,6 +8,7 @@
 #include<stack>//这个和下面的没用到
 #include<queue>
 #include<algorithm>
+#include<string>
 using namespace std;
 
 #define SIZE 10 //最大用户数
@@ -34,10 +35,10 @@ class User//用户类
     string phone;
     int UID;
     User(){};
-    void Registers();
-    void Login();
-    void Save();
-    void Read();
+    void Registers();//注册账号
+    void Login();//登录
+    void Save();//保存
+    void Read();//读取
 }us;
 
 
@@ -45,7 +46,7 @@ User user[SIZE];
 
 class MapNode//顶点信息
 {
-    public://他妈的不用public又访问不了下面的数据，用了又感觉不太安全，这玩意要小心处理   
+    public:
     string Name;//地图节点名字
     string Imformation;//地图信息，描述这个建筑
     int Number;//顶点编号
@@ -58,13 +59,15 @@ public:
     ~MGraph( ){ };            //析构函数
     void Update();//更新数据
     void Dijkstra(int v,int a,int t);  		//两个景点最短路径
-	int Min(int r[ ], int n);
-    void MapCheck(int);// ^ ^
-    void MapRead();
-    void ChangeMapImf(int);
+	int Min(int r[ ], int n);//返回数组除0外的最小值的下标
+    void MapCheck(int);//查看地图^ ^
+    void MapRead();//读取地图
+    void ChangeMapImf(int);//修改地图信息
     void DeleteNode(int);//删除节点
     void CreatNewNode(); //创造新节点
     void EdgeDataChange();//对节点的边操作
+    void DATASAVE(int); //将修改后的数据写入文件。1是为写入边数据，其余是写入地图数据
+    void DeleteEdge();  //删除特定边
     int GetEdgeNum();    //获取当前txt文件边的数量
     int GetvertexNum(){return vertexNum++;}
 private:
@@ -73,18 +76,12 @@ private:
     int vertexNum, edgeNum;              //图的顶点数和边数
  };
 
-
-
-void f2(string str, string &str1, string &str2, string &str3);
-int f1(string str);
-int inputString(char *filename,string str[]);
-void CountMenu();
+void f2(string str, string &str1, string &str2, string &str3);//使用string类的find函数分隔字符串
+void f2(string str, string &str1, string &str2);//重载,这个是用来删除边数据的
+void f21(string str, string &str1, string &str2);
+int f1(string str);//返回str中的数字字符串所对应的整数
+void inputString(char *filename,string str[]);//将filename所指文件按行输出到数组str[]中
+void CountMenu();//账号菜单
 void PrintMap();
 void PrintMenu();
-void NodeImfMenu();
-
-int asdasd();
-int asdasd()
-{
-    return TEST++;
-}
+void NodeImfMenu();//节点信息菜单
