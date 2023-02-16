@@ -244,6 +244,7 @@ void User::Save()
     {
         ofile << user[i].phone <<endl;
         ofile << user[i].password <<endl;
+        ofile << user[i].UID<<endl;
     }
     ofile.close();
 }
@@ -265,6 +266,7 @@ void User::Read()
     {
         ifile >> user[i].phone;
         ifile >> user[i].password;
+        ifile >> user[i].UID;
         scount++;
     }
     scount--;
@@ -459,7 +461,6 @@ void User::Login()
                     cout<<"登陆成功!";
                     UpOrDown = true;
                     IsVip=true;
-
                     Location=i;
                     return;
                 }
@@ -1259,6 +1260,13 @@ void MGraph::DeleteEdge()
          if(!One.compare(Fir)&&!Two.compare(Sec))//找到的话
          {
             cout<<"该边详细数据为(编号>编号>权值):"<<str<<endl;
+            cout<<"是否决定删除?"<<endl;
+            cout<<"ESC--不删   其他键--删!";
+            char _ch=_getch();
+             if(GetAsyncKeyState(VK_ESCAPE))
+            {
+            return;
+            }
             system("pause>nul");
             FirAndSec=str;//把具体的复制给它
             Mode=true;
