@@ -820,7 +820,14 @@ void MGraph :: Dijkstra(int v,int a,int MODE)                      //从源点v�
         else check++;
         if(check==vertexNum)
         {
-        cout<<"该地点没有路";
+        if(A==false)
+        {
+        cout<<vertex[v-1].Name<<"没有路能走";
+        }
+        else if(B==false)
+        {     
+        cout<<vertex[a-1].Name<<"没有路能走";       
+        }
         system("pause");
         return;
         }
