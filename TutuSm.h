@@ -138,7 +138,12 @@ void Menu()
         	cout<<"景点编号不能输入一致或编号错误！请重新输入::"<<endl; 
         	cin>>i>>k;
 		}
+        if(i>k)
 		a.Dijkstra(i,k,1);
+        else
+        {
+            a.Dijkstra(k,i,1);
+        }
         cout<<"按任意键返回菜单";
 		system("pause>nul");
     }break;
@@ -778,10 +783,11 @@ void f2(string str, string &str1, string &str2)//使用string类的find函数分
     }
 }
 
-void MGraph :: Dijkstra(int v,int a,int MODE)                      //从源点v出发
+void MGraph :: Dijkstra(int v,int a,int MODE)                      //从源点v出发到达a
 {
     int check=0;
-  	int i,k, num, dist[maxsize],distance[maxsize];
+    int sNumber=0;
+  	int i,k, num, dist[maxsize],distance[maxsize]={0},s[maxsize]={0};
   	string path[maxsize];
     bool A=false,B=false;
 	for (i = 0; i < vertexNum; i++)            //初始化数组dist和path
@@ -819,7 +825,7 @@ void MGraph :: Dijkstra(int v,int a,int MODE)                      //从源点v�
 
         if(A==true&&B==true)break;//如果两点都有路的话
         else check++;
-        if(check==vertexNum)
+        if(check==vertexNum)//查找完后发现没有路
         {
         if(A==false)
         {
@@ -834,26 +840,27 @@ void MGraph :: Dijkstra(int v,int a,int MODE)                      //从源点v�
         }
     }
 	for (num = 1; num < vertexNum; num++)
-	{
-		k = Min(dist, vertexNum);      //在dist数组中找最小值并返回其下标
-		distance[k]=dist[k];//?
+	{     
+		k = Min(dist, vertexNum);      //在dist数组中找最小值并返回其下标，就是找出离源节点最近的节点，让他迭代
+		distance[k]=dist[k];           //打印距离的，这里有点问题
   		for (i = 0; i < vertexNum; i++)             //修改数组dist和path
     		if (dist[i] > dist[k] + edge[k][i]) 
             {
        			dist[i] = dist[k] + edge[k][i];
-       			path[i] = path[k] + "->"+vertex[i].Name;         //+为字符串连接操作
+       			path[i] = path[k] + "->"+vertex[i].Name;         //+为字符串连接操作            
     		}
-		dist[k] = 0;                            //将顶点k加到集合S中
+		dist[k] = 0;                            //将顶点k加到集合S中        
 	}
 	if(MODE==1)
     {
-	cout<<vertex[v-1].Name +"到"+ vertex[a-1].Name<<"的最短距离是:"<< distance[a-1]<<endl;
+	cout<<vertex[v-1].Name +"到"+ vertex[a-1].Name<<"的最短距离是:"<< distance[a-1]<<endl;//BUG: 1到13不行 13到1行
     }
 	if(MODE==2)
 	{
     cout<<vertex[v-1].Name +"到"+ vertex[a-1].Name<<"的最短路径是:"<<endl;
     cout<< path[a-1]<<endl;
     }
+    cout<<endl;
 }
 
 int MGraph ::Min(int r[ ], int n)
