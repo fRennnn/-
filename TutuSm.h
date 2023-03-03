@@ -786,7 +786,6 @@ void f2(string str, string &str1, string &str2)//使用string类的find函数分
 void MGraph :: Dijkstra(int v,int a,int MODE)                      //从源点v出发到达a
 {
     int check=0;
-    int sNumber=0;
   	int i,k, num, dist[maxsize],distance[maxsize]={0},s[maxsize]={0};
   	string path[maxsize];
     bool A=false,B=false;
