@@ -137,13 +137,8 @@ void Menu()
     	{
         	cout<<"景点编号不能输入一致或编号错误！请重新输入::"<<endl; 
         	cin>>i>>k;
-		}
-        if(i>k)
-		a.Dijkstra(i,k,1);
-        else
-        {
-            a.Dijkstra(k,i,1);
-        }
+		}		
+            a.Dijkstra(i,k,1);      
         cout<<"按任意键返回菜单";
 		system("pause>nul");
     }break;
@@ -838,7 +833,7 @@ void MGraph :: Dijkstra(int v,int a,int MODE)                      //从源点v�
         return;
         }
     }
-	for (num = 1; num < vertexNum; num++)
+	for (num = 1; num <= vertexNum; num++)//少循环一次了 sb
 	{     
 		k = Min(dist, vertexNum);      //在dist数组中找最小值并返回其下标，就是找出离源节点最近的节点，让他迭代
 		distance[k]=dist[k];           //打印距离的，这里有点问题
@@ -1020,6 +1015,7 @@ void MGraph::CreatNewNode()
     ofs.close();
     cout<<"输入成功^ ^"<<endl;
     a.DATASAVE(0);
+    a.DATASAVE(1);
 }
 
 void MGraph::EdgeDataChange()
