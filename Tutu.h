@@ -5,8 +5,6 @@
 #include<windows.h>
 #include"iostream"
 #include"fstream"
-#include<stack>//这个和下面的没用到
-#include<queue>
 #include<algorithm>
 #include<string>
 using namespace std;
@@ -32,13 +30,14 @@ class User//用户类
     private:
     string password;//密码
     public:
-    string phone;
-    int UID;
+    string Account;
+    string UID;
     User(){};
     void Registers();//注册账号
     void Login();//登录
     void Save();//保存
     void Read();//读取
+    void Delete_Account();//删除账号
 }us;
 
 
@@ -76,10 +75,10 @@ private:
     int vertexNum, edgeNum;              //图的顶点数和边数
  };
 
-void f2(string str, string &str1, string &str2, string &str3);//使用string类的find函数分隔字符串
-void f2(string str, string &str1, string &str2);//重载,这个是用来删除边数据的
-void f21(string str, string &str1, string &str2);
-int f1(string str);//返回str中的数字字符串所对应的整数
+void return_data1(string str, string &str1, string &str2, string &str3);//使用string类的find函数分隔字符串
+void return_data1(string str, string &str1, string &str2);//重载,这个是用来删除边数据的
+void return_data2(string str, string &str1, string &str2);//主要为了输入格式好看一些
+int return_Number(string str);//返回str中的数字字符串所对应的整数
 void inputString(char *filename,string str[]);//将filename所指文件按行输出到数组str[]中
 void CountMenu();//账号菜单
 void PrintMap();
