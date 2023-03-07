@@ -66,7 +66,7 @@ void PrintMenu()//打印菜单，并且根据地图打开情况做出相应的�
     {
         cout<<"\t\t                                 当前为管理员状态"<<endl;
         
-        cout<<"\t\t\t                                 当前UID:"<<user[Location].phone<<endl;//使用隐藏密码输入会导致uid错乱(已解决)
+        cout<<"\t\t\t                                 当前UID:"<<user[Location].Account<<endl;//使用隐藏密码输入会导致uid错乱(已解决)
     }
     PrintMap();
     }
@@ -84,6 +84,7 @@ void Menu()
     int j=0;
     
     PrintMenu();   //打印菜单表
+    cout<<">>";
     i=getch();
     //-----------------------------------这是菜单,写好的函数放进去就是了
     switch (i)
@@ -186,6 +187,8 @@ void CountMenu()
     cout<<"2-- 注册账号"<<endl;
     }
     cout<<"3-- 退出账号"<<endl;
+    cout<<"4-- 注销账号"<<endl;
+    cout<<">>";
     User Uid;
     while(1)
     {
@@ -195,7 +198,7 @@ void CountMenu()
             system("cls");
             return;
         }
-        if(ch=='1'||ch=='2'||ch=='3')
+        if(ch=='1'||ch=='2'||ch=='3'||ch=='4')
         {
             break;
         }
@@ -232,7 +235,11 @@ void CountMenu()
             UpOrDown=false;
             system("cls");
             cout<<"退出成功"<<endl;
-        }
+        }break;
+        case '4':
+        {
+            Uid.Delete_Account();
+        }break;
     }
 }
 void User::Save()
@@ -242,7 +249,7 @@ void User::Save()
 
     for(int i = 0; i<scount; i++)
     {
-        ofile << user[i].phone <<endl;
+        ofile << user[i].Account <<endl;
         ofile << user[i].password <<endl;
         ofile << user[i].UID<<endl;
     }
@@ -264,7 +271,7 @@ void User::Read()
 
     for(int i=0;!ifile.eof();i++)
     {
-        ifile >> user[i].phone;
+        ifile >> user[i].Account;
         ifile >> user[i].password;
         ifile >> user[i].UID;
         scount++;
@@ -299,13 +306,13 @@ void User::Registers()
 
         for(int i=0;i<scount;i++)
         {
-            if(ph==user[i].phone)
+            if(ph==user[i].Account)
             {
                 cout<<"用户已存在"<<endl;
                 goto here;
             }
         }
-        user[i].phone = ph;
+        user[i].Account = ph;
 
         
         cout<<endl;
@@ -415,6 +422,63 @@ void User::Registers()
             break;
     }
 }
+
+void User::Delete_Account()
+{
+    bool NOWACC=false;
+    int loopSkip=0;
+    if(!UpOrDown)
+    {
+        cout<<"需要登陆账号才能执行账号注销"<<endl;
+        system("pause>nul");
+        return;
+    }
+    string str;
+    string NUM=user[Location].UID+'\r';//debug了好久才发现这里少了'\r'，难怪删除没反应。
+    string ACC=user[Location].Account+'\r';//这些数据和str就差个'\r'，故加了这个东西
+    string PAS=user[Location].password+'\r';
+    cout<<"当前账号为:"<<user[Location].Account<<endl;
+    cout<<"是否删除账号?(ESC键--不删除,其余键--删除)"<<endl;
+    cout<<">>";
+    char _ch=_getch();
+    if(GetAsyncKeyState(VK_ESCAPE))
+    {
+        cout<<"退出成功";
+        system("pause>nul");
+        return;
+    }
+    ifstream ifs;
+    ofstream ofs;
+    ifs.open("user.txt",ios::binary|ios::out|ios::in);//把user给tmp
+    ofs.open("tmp.txt",ios::binary|ios::out);
+    while(getline(ifs,str))
+    {
+        if(loopSkip!=0)//如果找到账号，后面两行账号数据自动跳过
+        {
+            loopSkip--;
+            continue;
+        }
+        if(!str.compare(ACC))//首先如果找到该账号，设置循环跳过次数
+        {
+            loopSkip=2;
+            continue;
+        }
+        ofs<<str<<endl;
+    }
+    ifs.close();
+    ofs.close();
+    ifs.open("tmp.txt",ios::binary|ios::out|ios::in);
+    ofs.open("user.txt",ios::binary|ios::out);
+    while(getline(ifs,str))//再把tep文件给uesr文件
+    {
+        ofs<<str<<endl;
+    }
+    ofs.close();
+    ifs.close();
+    cout<<"删除成功!";
+    IsVip=false;
+    UpOrDown=false;
+}
 void User::Login()
 {
     us.Read();
@@ -425,7 +489,7 @@ void User::Login()
     int x=0;
     char chose;
     here:
-    cout<<"\t\t\t请输入手机号:(输入000退出)";
+    cout<<"\t\t\t请输入帐号:(输入000退出)";
 
     cin>>ph;
     if(ph=="000")
@@ -455,7 +519,7 @@ void User::Login()
             cin>>pword;
             for(int i=0;i<scount;i++)//检查密码是否正确
             {
-                if(ph == user[i].phone && pword ==user[i].password)
+                if(ph == user[i].Account && pword ==user[i].password)
                 {
                     time++;
                     cout<<"登陆成功!";
@@ -499,7 +563,7 @@ void User::Login()
     } 
     for(int i=0;i<scount;i++)
             {
-                if(ph==user[i].phone && passwords0 == user[i].password)//检查密码是否正确
+                if(ph==user[i].Account && passwords0 == user[i].password)//检查密码是否正确
                 {
                     time++;
                     cout<<"登陆成功"<<endl;
@@ -706,10 +770,10 @@ MGraph::MGraph()//初始化邻接矩阵
  	inputString("distance.txt",fileString);//返回distance文件的行数，即边的数量
     edgeNum = GetEdgeNum();
  	 for(int i = 0; i <edgeNum; i++)
- 	f2(fileString[i], subString1[i], subString2[i], subString3[i]);
+ 	return_data1(fileString[i], subString1[i], subString2[i], subString3[i]);
  	for(int r = 0; r < edgeNum; r++)
 	{   
-        if((f1(subString1[r])-1)>vertexNum||(f1(subString2[r])-1)>vertexNum)//检查字符的数字是否超出顶点数
+        if((return_Number(subString1[r])-1)>vertexNum||(return_Number(subString2[r])-1)>vertexNum)//检查字符的数字是否超出顶点数
         {
             cout<<"数据错误,请进行数据检查"<<endl;
             cout<<"位于数组["<<r<<"]的元素出错,请修改!"<<endl;;
@@ -717,8 +781,8 @@ MGraph::MGraph()//初始化邻接矩阵
             return;
         }
 
-		edge[f1(subString1[r])-1][f1(subString2[r])-1] = f1(subString3[r]);//由于是无向图,因而路径是双向的
-		edge[f1(subString2[r])-1][f1(subString1[r])-1] = f1(subString3[r]);
+		edge[return_Number(subString1[r])-1][return_Number(subString2[r])-1] = return_Number(subString3[r]);//由于是无向图,因而路径是双向的
+		edge[return_Number(subString2[r])-1][return_Number(subString1[r])-1] = return_Number(subString3[r]);
 	}
 } 
 
@@ -743,7 +807,7 @@ void inputString(char *filename,string str[])//将filename所指文件按行输�
            //返回表达式的实际个数,这里的i返回有问题
 }
 
-int f1(string str)//返回str中的数字字符串所对应的整数
+int return_Number(string str)//返回str中的数字字符串所对应的整数
 {
     int result = 0;
 	for(unsigned int i = 0; i < str.length(); i++)//for循环遍历字符串
@@ -756,7 +820,7 @@ int f1(string str)//返回str中的数字字符串所对应的整数
 	return result;	//返回字符串所对应的整数
 }
 
-void f2(string str, string &str1, string &str2, string &str3)//使用string类的find函数分隔字符串
+void return_data1(string str, string &str1, string &str2, string &str3)//使用string类的find函数分隔字符串
 {
     int m = str.find('>');
     int n = str.find('>', m + 1);
@@ -767,7 +831,7 @@ void f2(string str, string &str1, string &str2, string &str3)//使用string类�
         else if(i > n){str3 += str[i];}            //读两个景点之间的距离
     }
 }
-void f2(string str, string &str1, string &str2)//使用string类的find函数分隔字符串
+void return_data1(string str, string &str1, string &str2)//使用string类的find函数分隔字符串
 {
     int m = str.find('>');
     int n = str.find('>', m + 1);
@@ -966,7 +1030,7 @@ void MGraph::DeleteNode(int x)
         Fir.clear();
         Sec.clear();
 
-        f2(str,Fir,Sec);                        //使用string类的find函数分隔字符串
+        return_data1(str,Fir,Sec);                        //使用string类的find函数分隔字符串
 
         if(!Fir.compare(_Number)||!Sec.compare(_Number))//返回str中的数字字符串所对应的整数
         { 
@@ -1111,10 +1175,10 @@ void MGraph::Update()
  	inputString("distance.txt",fileString);//返回distance文件的行数，即边的数量
     edgeNum = GetEdgeNum();
  	 for(int i = 0; i <edgeNum; i++)
- 	f2(fileString[i], subString1[i], subString2[i], subString3[i]);
+ 	return_data1(fileString[i], subString1[i], subString2[i], subString3[i]);
  	for(int r = 0; r < edgeNum; r++)
 	{   
-        if((f1(subString1[r])-1)>vertexNum||(f1(subString2[r])-1)>vertexNum)//检查字符的数字是否超出顶点数
+        if((return_Number(subString1[r])-1)>vertexNum||(return_Number(subString2[r])-1)>vertexNum)//检查字符的数字是否超出顶点数
         {
             cout<<"数据错误,请进行数据检查"<<endl;
             cout<<"位于数组["<<r<<"]的元素出错,请修改!"<<endl;;
@@ -1122,8 +1186,8 @@ void MGraph::Update()
             return;
         }
 
-		edge[f1(subString1[r])-1][f1(subString2[r])-1] = f1(subString3[r]);//由于是无向图,因而路径是双向的
-		edge[f1(subString2[r])-1][f1(subString1[r])-1] = f1(subString3[r]);
+		edge[return_Number(subString1[r])-1][return_Number(subString2[r])-1] = return_Number(subString3[r]);//由于是无向图,因而路径是双向的
+		edge[return_Number(subString2[r])-1][return_Number(subString1[r])-1] = return_Number(subString3[r]);
 	}
 }
 
@@ -1173,8 +1237,8 @@ void MGraph::DATASAVE(int ModeSetting)
     {
         Fir.clear();
         Sec.clear();
-        f2(str,Fir,Sec); 
-        if(f1(Fir)>vertexNum||f1(Sec)>vertexNum)continue;//编号大于景点数的不被写入文件
+        return_data1(str,Fir,Sec); 
+        if(return_Number(Fir)>vertexNum||return_Number(Sec)>vertexNum)continue;//编号大于景点数的不被写入文件
         ofs<<str<<endl;
     }
     ofs.close();
@@ -1241,14 +1305,14 @@ void MGraph::DeleteEdge()
     do{
     cin>>FirAndSec;
     FirAndSec.erase(remove(FirAndSec.begin(),FirAndSec.end(),' '),FirAndSec.end());
-    if((FirAndSec.find('>')==-1))
+    if((FirAndSec.find('>')==-1))//如果输入格式不对的话，也就是找不到这个大于符号的话
     {
         cout<<"请按格式输入!"<<endl;
     }
     else 
     break;
     }while(1);
-    f21(FirAndSec,Fir,Sec);//记录输入的字符
+    return_data2(FirAndSec,Fir,Sec);//记录输入的字符
     ifstream ifs;
     ofstream ofs;
     ifs.open("distance.txt",ios::binary|ios::out|ios::in);
@@ -1258,7 +1322,7 @@ void MGraph::DeleteEdge()
     {
         One.clear();
         Two.clear();
-        f2(str,One,Two);
+        return_data1(str,One,Two);
          if(!One.compare(Fir)&&!Two.compare(Sec))//找到的话
          {
             cout<<"该边详细数据为(编号>编号>权值):"<<str<<endl;
@@ -1303,7 +1367,7 @@ void MGraph::DeleteEdge()
     a.Update();
 }
 
-void f21(string str, string &str1, string &str2)//主要为了输入格式好看一些
+void return_data2(string str, string &str1, string &str2)//主要为了输入格式好看一些
 {
     int m = str.find('>');
     int n = str.length();
