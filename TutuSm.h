@@ -66,7 +66,7 @@ void PrintMenu()//打印菜单，并且根据地图打开情况做出相应的�
     {
         cout<<"\t\t                                 当前为管理员状态"<<endl;
         
-        cout<<"\t\t\t                                 当前UID:"<<user[Location].Account<<endl;//使用隐藏密码输入会导致uid错乱(已解决)
+        cout<<"\t\t\t                                 当前UID:"<<user[Location].UID<<endl;//使用隐藏密码输入会导致uid错乱(已解决)
     }
     PrintMap();
     }
@@ -255,11 +255,11 @@ void User::Save()
     }
     ofile.close();
 }
-void User::Read()
+void User::Read()//user文件不能有多余的行数
 {
     ifstream ifile;
+    string str;
     ifile.open("user.txt",ios::in);
-
     scount = 0;
     if(!ifile.is_open())
     {
@@ -273,8 +273,9 @@ void User::Read()
     {
         ifile >> user[i].Account;
         ifile >> user[i].password;
-        ifile >> user[i].UID;
+        ifile >> user[i].UID;     
         scount++;
+        UidNumber=return_Number(user[i].UID);
     }
     scount--;
     ifile.close();
@@ -295,7 +296,7 @@ void User::Registers()
         system("cls");
         MapPrintOk=false;
         here:
-        cout<<"\t\t\t请输入手机号:(输入000退出)";
+        cout<<"\t\t\t请输入帐号:(输入000退出)";
         
         cin>>ph;
         
@@ -313,7 +314,6 @@ void User::Registers()
             }
         }
         user[i].Account = ph;
-
         
         cout<<endl;
         cout<<"选择输入模式:"<<endl;
@@ -342,7 +342,7 @@ void User::Registers()
                 }
                 else
                 {
-                    user[i].UID=i+1;
+                    user[i].UID=to_string(++UidNumber);
                     scount++;
                     cout<<"注册成功!"<<endl;
                     IsVip = true;
@@ -401,7 +401,7 @@ void User::Registers()
                 }
                 else 
                 {
-                    user[i].UID=i+1;
+                    user[i].UID=to_string(++UidNumber);
                     scount++;
                     cout<<"\t\t\t注册成功!"<<endl;
                     us.Save();
@@ -425,7 +425,6 @@ void User::Registers()
 
 void User::Delete_Account()
 {
-    bool NOWACC=false;
     int loopSkip=0;
     if(!UpOrDown)
     {
@@ -476,6 +475,7 @@ void User::Delete_Account()
     ofs.close();
     ifs.close();
     cout<<"删除成功!";
+    scount--;
     IsVip=false;
     UpOrDown=false;
 }
@@ -517,7 +517,7 @@ void User::Login()
         {
             cout<<"请输入密码:";
             cin>>pword;
-            for(int i=0;i<scount;i++)//检查密码是否正确
+            for(int i=0;i<=scount;i++)//检查密码是否正确
             {
                 if(ph == user[i].Account && pword ==user[i].password)
                 {
@@ -561,7 +561,7 @@ void User::Login()
         }
         break;
     } 
-    for(int i=0;i<scount;i++)
+    for(int i=0;i<=scount;i++)
             {
                 if(ph==user[i].Account && passwords0 == user[i].password)//检查密码是否正确
                 {
@@ -605,10 +605,11 @@ void PrintMap()
 
     for(string str;getline(ifile,str);)//输出txt文件的所有内容
     cout<<str<<endl;
-    MapPrintOk=true;
+    
+    MapPrintOk=true;//告诉程序地图已经打印了
 }
 
-/*void MapRead()
+/*void MapRead()这个函数多余的
 {
     ifstream ifile;
     ifile.open("Node.txt",ios::in);
