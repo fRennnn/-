@@ -231,6 +231,12 @@ void CountMenu()
         break;
         case '3':
         {
+            if(UpOrDown== false)
+            {
+            cout<<"|   |你还没登录过账号"<<endl;
+            cout<<"    ^"<<endl;
+            return;
+            }
             IsVip=false;
             UpOrDown=false;
             system("cls");
@@ -255,7 +261,7 @@ void User::Save()
     }
     ofile.close();
 }
-void User::Read()//user文件不能有多余的行数
+inline void User::Read()//user文件不能有多余的行数
 {
     ifstream ifile;
     string str;
@@ -275,9 +281,18 @@ void User::Read()//user文件不能有多余的行数
         ifile >> user[i].password;
         ifile >> user[i].UID;     
         scount++;
-        UidNumber=return_Number(user[i].UID);
     }
     scount--;
+    ifile.close();
+
+    ifile.open("uidNumber.txt",ios::in);
+    if(!ifile.is_open())
+    {
+        cout<<"文件打开失败"<<endl;
+        system("pause");
+        return;
+    }
+    ifile>>UidNumber;
     ifile.close();
 }
 void User::Registers()
@@ -409,6 +424,17 @@ void User::Registers()
                 break;
             }
         }
+        ofstream ofile;
+        ofile.open("uidNumber.txt",ios::in);
+        if(!ofile.is_open())
+    {
+        cout<<"文件打开失败"<<endl;
+        system("pasue<nul");
+        return;
+    }
+        ofile<<UidNumber;
+        ofile.close();
+        
         char choice;
         //IsVip=true;//这是管理员账号，所以你有权限了
             cout<<"是否继续注册(Y/N)?:";
@@ -428,8 +454,8 @@ void User::Delete_Account()
     int loopSkip=0;
     if(!UpOrDown)
     {
-        cout<<"需要登陆账号才能执行账号注销"<<endl;
-        system("pause>nul");
+        cout<<"|   |需要登陆账号才能执行账号注销"<<endl;
+        cout<<"    ^"<<endl;
         return;
     }
     string str;
@@ -486,6 +512,8 @@ void User::Login()
     char ch;
     char passwords0[20];
     int time = 0;
+    bool Found=false;
+    bool Passw=false;
     int x=0;
     char chose;
     here:
@@ -519,19 +547,33 @@ void User::Login()
             cin>>pword;
             for(int i=0;i<=scount;i++)//检查密码是否正确
             {
-                if(ph == user[i].Account && pword ==user[i].password)
+                if(ph==user[i].Account) Found = true;//先查找是否存在该账号
+                if(Found)//如果找到了在看看密码对不对
                 {
-                    time++;
-                    cout<<"登陆成功!";
+                    if(pword == user[i].password)
+                    {
+                    cout<<"登陆成功"<<endl;//检查密码是否正确
                     UpOrDown = true;
                     IsVip=true;
-                    Location=i;
-                    return;
+                    Passw=true;
+                    Location=i; 
+                    break;
+                    }
+                    else 
+                    {
+                        Passw=false;
+                        break;//既然都找到账号但没输对密码就直接退出循环，不需要在遍历下去了
+                    }
                 }
             }
-            if(time =0)
+            if(Found == false)
             {
-                cout<<"手机号或密码错误!"<<endl;
+                cout<<"没有找到该账号"<<endl;
+                goto here;
+            }
+            else if(Passw == false)
+            {
+                cout<<"密码输入错误!"<<endl;
                 goto here;
             }
         }
@@ -558,25 +600,40 @@ void User::Login()
             }
             passwords0[x]='\0';
             cout<<endl;
+            for(int i=0;i<=scount;i++)
+            {
+                if(ph==user[i].Account) Found = true;//先查找是否存在该账号
+                if(Found)//如果找到了在看看密码对不对
+                {
+                    if(passwords0 == user[i].password)
+                    {
+                    cout<<"登陆成功"<<endl;//检查密码是否正确
+                    UpOrDown = true;
+                    IsVip=true;
+                    Passw=true;
+                    Location=i; 
+                    break;
+                    }
+                    else 
+                    {
+                        Passw=false;
+                        break;//既然都找到账号但没输对密码就直接退出循环，不需要在遍历下去了
+                    }
+                }
+            }
+            if(Found == false)
+            {
+                cout<<"没有找到该账号"<<endl;
+                goto here;
+            }
+            else if(Passw == false)
+            {
+                cout<<"密码输入错误!"<<endl;
+                goto here;
+            }
         }
         break;
     } 
-    for(int i=0;i<=scount;i++)
-            {
-                if(ph==user[i].Account && passwords0 == user[i].password)//检查密码是否正确
-                {
-                    time++;
-                    cout<<"登陆成功"<<endl;
-                    UpOrDown = true;
-                    IsVip=true;
-                    Location=i;
-                }
-            }
-            if(time == 0)
-            {
-                cout<<"手机号或者密码错误"<<endl;
-                goto here;
-            }
 }
   /*
        　  　▃▆█▇▄?
