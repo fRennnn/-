@@ -15,14 +15,13 @@ using namespace std;
 int scount = 0;
 int UidNumber = 0;
 bool IsVip = false;//判断是不是VIP
-bool ZHUANGTAI = false;//判断文件是否成功打开
+bool ZHUANGTAI = false;//判断user.txt文件是否成功打开
 bool UpOrDown = false;//判断用户有无上号
 bool MapPrintOk = false;//判断地图是否打印出来
 
-
 int TEST=1;//不用管这个，测试用的值
-int Location = 0;//用户账号所在的位置
 
+int Location = 0;//用户账号所在的位置
 int number = 0; //当前景点数 
 void Menu();
 void gotoxy(int x,int y);//没用到的函数
@@ -33,7 +32,7 @@ class User//用户类
     string password;//密码
     public:
     string Account;
-    string UID;
+    string UID;//如果注销账号，重新启动程序可能导致uid只是文件当前最大值而不是历史最大值，用文件保存会好一点
     User(){};
     void Registers();//注册账号
     void Login();//登录
@@ -76,12 +75,15 @@ private:
     int edge[maxsize][maxsize];           //存放图中边的数组
     int vertexNum, edgeNum;              //图的顶点数和边数
  };
-
+ 
+//----文件内的数据操作
 void return_data1(string str, string &str1, string &str2, string &str3);//使用string类的find函数分隔字符串
 void return_data1(string str, string &str1, string &str2);//重载,这个是用来删除边数据的
 void return_data2(string str, string &str1, string &str2);//主要为了输入格式好看一些
 int return_Number(string str);//返回str中的数字字符串所对应的整数
 void inputString(char *filename,string str[]);//将filename所指文件按行输出到数组str[]中
+
+//----菜单函数
 void CountMenu();//账号菜单
 void PrintMap();
 void PrintMenu();
