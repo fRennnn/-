@@ -1,12 +1,5 @@
 #include"Tutu.h"
 MGraph a;//直接在这初始化，不然下面的函数不能用。
-void gotoxy(int x,int y)//什么垃圾? 狗都不用
-{
-    COORD c;
-    c.X=x;
-    c.Y=y;
-    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE),c);//依托答辩
-}
 
 void PrintMenu()//打印菜单，并且根据地图打开情况做出相应的打印变化
 {
@@ -284,8 +277,23 @@ inline void User::Read()//user文件不能有多余的行数
     }
     scount--;
     ifile.close();
+    if(scount==0)
+    {
+       //没有一个账号那就从0开始
+       ofstream ofile;
+        ofile.open("uidNumber.txt",ios::binary|ios::out);
+        if(!ofile.is_open())
+    {
+        cout<<"文件打开失败"<<endl;
+        system("pasue<nul");
+        return;
+    }
+        ofile<<0;
+        ofile.close(); 
+    }
+    
 
-    ifile.open("uidNumber.txt",ios::in);
+    ifile.open("uidNumber.txt",ios::binary|ios::in);
     if(!ifile.is_open())
     {
         cout<<"文件打开失败"<<endl;
@@ -808,7 +816,7 @@ MGraph::MGraph()//初始化邻接矩阵
         return;
     }
 
-    for(int i=0;!ifile.eof()&&i<50;i++)
+    for(int i=0;!ifile.eof()&&i<50;i++)//加载地图数据
     {
         ifile >> vertex[i].Number;
         ifile >> vertex[i].Name;
@@ -1090,8 +1098,8 @@ void MGraph::DeleteNode(int x)
 
         return_data1(str,Fir,Sec);                        //使用string类的find函数分隔字符串
 
-        if(!Fir.compare(_Number)||!Sec.compare(_Number))//返回str中的数字字符串所对应的整数
-        { 
+        if(!Fir.compare(_Number)||!Sec.compare(_Number))
+        { //返回str中的数字字符串所对应的整数
             continue;
         }
         ofs<<str<<endl;
@@ -1385,7 +1393,7 @@ void MGraph::DeleteEdge()
          {
             cout<<"该边详细数据为(编号>编号>权值):"<<str<<endl;
             cout<<"是否决定删除?"<<endl;
-            cout<<"ESC--不删   其他键--删!";
+            cout<<"ESC--不删   其他键--删!"<<endl;
             char _ch=_getch();
              if(GetAsyncKeyState(VK_ESCAPE))
             {
