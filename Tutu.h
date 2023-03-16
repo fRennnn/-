@@ -24,7 +24,6 @@ int TEST=1;//不用管这个，测试用的值
 int Location = 0;//用户账号所在的位置
 int number = 0; //当前景点数 
 void Menu();
-void gotoxy(int x,int y);//没用到的函数
 
 class User//用户类
 {
@@ -79,7 +78,7 @@ private:
 //----文件内的数据操作
 void return_data1(string str, string &str1, string &str2, string &str3);//使用string类的find函数分隔字符串
 void return_data1(string str, string &str1, string &str2);//重载,这个是用来删除边数据的
-void return_data2(string str, string &str1, string &str2);//主要为了输入格式好看一些
+void return_data2(string str, string &str1, string &str2);//这个函数功能的实现跟上面的类似，具体用途是用来边查询方便一些，如查询A>B>C，你只需要输入A>B就可以了，毕竟你大概率不会记住它俩的距离
 int return_Number(string str);//返回str中的数字字符串所对应的整数
 void inputString(char *filename,string str[]);//将filename所指文件按行输出到数组str[]中
 
