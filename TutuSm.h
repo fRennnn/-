@@ -1150,6 +1150,7 @@ void MGraph::CreatNewNode()
 
 void MGraph::EdgeDataChange()
 {
+    string A,B,C;
     string FirAndSec;
     ofstream ofs;
     cout<<"注意:编号大于景点数的数据不被记录"<<endl;
@@ -1158,12 +1159,15 @@ void MGraph::EdgeDataChange()
     cout<<"请输入:";
     cin>>FirAndSec;
     FirAndSec.erase(remove(FirAndSec.begin(),FirAndSec.end(),' '),FirAndSec.end());
-    if((FirAndSec.find('>')==-1))
-    {
-        cout<<"请按格式输入!"<<endl;
-    }
-    else 
+    check_str(FirAndSec,A,B,C);
+    
+    if(distanceData&&biggerthan)
     break;
+    else
+    {
+        if(distanceData==false)cout<<"没有检测到距离数据"<<endl;
+        else if(biggerthan==false)cout<<"没有检测到>,或者说你打错了"<<endl;
+    }
     }while(1);
     ofs.open("distance.txt",ios::binary|ios::out|ios::app);
     if(!ofs.is_open())
@@ -1442,4 +1446,26 @@ void return_data2(string str, string &str1, string &str2)//主要为了输入格
         if(i < m){str1 += str[i];}                 //读第一个地图编号
         else if(i > m && i < n){str2 += str[i];}   //读第二个地图编号
     }
+}
+
+void check_str(string str, string &A, string &B, string &C)
+{
+    int m = str.find('>');
+    int n = str.find('>',m+1);
+    if(m==-1||n==-1){//如果输入不规范
+        biggerthan = false;
+        return;
+        }
+    for(int i = 0; i <str.length();i++)
+    {
+        if(i < m){A += str[i];}                 //读第一个地图编号
+        else if(i > m && i < n){B += str[i];}   //读第二个地图编号
+        else if(i > n){C += str[i];} 
+    }
+    if(C=="")//判断距离有没有输入
+    distanceData=false;
+    else
+    distanceData=true;
+
+    biggerthan=true;
 }
