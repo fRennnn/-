@@ -267,7 +267,6 @@ inline void User::Read()//user文件不能有多余的行数
         return;
     }
     ZHUANGTAI = true;
-
     for(int i=0;!ifile.eof();i++)
     {
         ifile >> user[i].Account;
@@ -809,6 +808,7 @@ MGraph::MGraph()//初始化邻接矩阵
 	ifstream ifile;
     ifile.open("Node.txt",ios::in);
 
+    
     if(!ifile.is_open())
     {
         cout<<"文件打开失败"<<endl;
@@ -853,7 +853,7 @@ MGraph::MGraph()//初始化邻接矩阵
 } 
 
 
-void inputString(char *filename,string str[])//将filename所指文件按行输出到数组str[]中，返回表达式的实际个数
+void inputString(const char *filename,string str[])//将filename所指文件按行输出到数组str[]中，返回表达式的实际个数
 { 
     ifstream infile;
 	infile.open(filename,ios::in);//功能：定义输入文件流对象infile，打开磁盘filename所指文件，并使filename所指文件与流对象infile关联。
