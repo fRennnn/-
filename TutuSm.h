@@ -8,21 +8,25 @@ void PrintMenu()//打印菜单，并且根据地图打开情况做出相应的�
     if(MapPrintOk==false)//如果地图没打开
     {
     cout<<"1 -- 显示地图"<<endl;
+
     cout<<"2 -- 查询任意两个景点之间的最短路径"<<endl;
     
     cout<<"3 -- 查询各景点的相关信息"<<endl;
     
     cout<<"4 -- 查询任意两个景点之间的最短距离"<<endl;
+
+    cout<<"5 -- 查询任意两个景点之间的所有路径"<<endl; 
     
-    cout<<"5 -- 增加，删除和更新有关景点信息";
+    cout<<"6 -- 增加，删除和更新有关景点信息";
+    
       if(!IsVip)
     cout<<"(管理员专用)"<<endl;
       else
     cout<<"(当前有权限使用)"<<endl;
     
-    cout<<"6 -- 账号系统"<<endl;
+    cout<<"7 -- 账号系统"<<endl;
    
-    cout<<"7 -- 退出系统";
+    cout<<"8 -- 退出系统";
     if(!UpOrDown)
     cout<<"\t\t                                 当前为游客状态"<<endl;
     else
@@ -43,16 +47,18 @@ void PrintMenu()//打印菜单，并且根据地图打开情况做出相应的�
     cout<<"3 -- 查询各景点的相关信息"<<endl;
     
     cout<<"4 -- 查询任意两个景点之间的最短距离"<<endl;
+
+    cout<<"5 -- 查询任意两个景点之间的所有路径"<<endl; 
     
-    cout<<"5 -- 增加，删除和更新有关景点和道路信息";
+    cout<<"6 -- 增加，删除和更新有关景点和道路信息";
       if(!IsVip)
     cout<<"(管理员专用)"<<endl;
       else
     cout<<"(当前有权限使用)"<<endl;
     
-    cout<<"6 -- 账号系统"<<endl;
+    cout<<"7 -- 账号系统"<<endl;
    
-    cout<<"7 -- 退出系统";
+    cout<<"8 -- 退出系统";
     if(!UpOrDown)
     cout<<"\t\t                                 当前为游客状态"<<endl;
     else
@@ -66,13 +72,6 @@ void PrintMenu()//打印菜单，并且根据地图打开情况做出相应的�
 }
 void Menu()
 {
-    /*ofstream ofs;
-    ofs.open("Node.txt",ios::out|ios::app);
-    ofs<<"TEST1"<<endl;
-    ofs<<"TEST2"<<endl;
-    ofs<<"TEST3"<<endl;
-    ofs.close();
-    */
     char i=0;
     int j=0;
     
@@ -138,6 +137,11 @@ void Menu()
     }break;
     case '5':
     {
+    	a.allpath();
+    	system("pause>nul");
+	}break;
+    case '6':
+    {
         if(IsVip)//简单的判断是不是VIP
         {
             NodeImfMenu();
@@ -152,7 +156,7 @@ void Menu()
         }
     }
         break;
-    case '6':
+    case '7':
     {
         CountMenu();
         //ser UID;
@@ -161,7 +165,7 @@ void Menu()
         system("pause>nul");
     }
     break;
-    case '7':
+    case '8':
     exit(0);//关闭整个文件
     default:
         break;
@@ -1254,7 +1258,7 @@ void MGraph::Update()
 {
     string tmp;
     int NodeNumber=0;
-    MapNode Test[50];
+    MapNode Test[50];//中转数组
 
     for(int i=0;i<50;i++)
     {
@@ -1544,4 +1548,90 @@ void check_str(string str, string &A, string &B, string &C)
     distanceData=true;
 
     biggerthan=true;
+}
+void MGraph::allpath() 
+{
+	int startnum,nodenum;
+	bool instack[vertexNum]={0};
+	stack<int> nodestack;
+	int c_position=0;
+	vector<vector<int> >paths;//存储所有路径
+	vector<int>path;//存储单条路径
+	cout<<"请输入想要查询所有路径的两个景点的编号："<<endl;
+	cin>>startnum>>nodenum;
+	while(startnum>vertexNum||nodenum>vertexNum)
+	{
+		cout<<"输入的编号大于顶点数，输入错误！请重新输入："<<endl;
+		cin>>startnum>>nodenum;
+	}
+	cout<<a.vertex[startnum-1].Name<<"到"<<a.vertex[nodenum-1].Name<<"之间的所有路径为："<<endl;
+	nodestack.push(startnum-1);
+	instack[0]=1;//设置起点已入栈，1表示在栈中，0 表示不在
+	int tmp,top_element;//记录栈顶元素
+    while(!nodestack.empty())
+    {
+    	top_element=nodestack.top();//查看栈顶元素，判断是否已经到达终点
+    	if(top_element==nodenum-1)//若到达终点，输出路径，弹出栈中两个点，设置出栈状态
+    	{
+    		while(!nodestack.empty())
+    		{
+    			tmp=nodestack.top();
+    			nodestack.pop();
+    			path.push_back(tmp);
+			}
+    		paths.push_back(path);
+    		for (vector<int>::reverse_iterator rit = path.rbegin(); rit != path.rend(); rit++)
+			{
+		    	nodestack.push(*rit);
+			}
+			path.clear();//清除单条路径
+		 
+			nodestack.pop();
+			instack[top_element]=0;
+			c_position=nodestack.top();
+			top_element=nodestack.top();
+			nodestack.pop();
+			instack[top_element]=0; 
+			}
+		else
+		{
+			int i=0;
+			for(i=c_position+1;i<nodenum+2;i++)
+			{
+				if(instack[i]==0&&a.edge[top_element][i]!=INFINITY)//未入栈，而且节点之间有边相连
+				{
+					instack[i]=1;
+					nodestack.push(i);//入栈
+					c_position=0;
+					break; 
+				}
+			}
+			if(i==nodenum+2)
+			{
+				top_element=nodestack.top();
+				instack[top_element]=0;
+				c_position=nodestack.top();
+				nodestack.pop();
+			}
+		}
+	}
+	for (int i = 0; i <paths.size(); i++)
+	{
+		cout << "路径" << i+1 << ": ";
+		for (int j = paths[i].size()-1; j >=0; j--)
+		{
+		    if (j == 0)
+		    {
+		                //cout << paths[i][j];
+		    	cout << a.vertex[ paths[i][j] ].Name;
+		    }
+		    else
+		    {
+		                //cout << paths[i][j] << "->";
+		        cout << a.vertex[ paths[i][j] ].Name<< "->";
+		    }
+		
+		}
+		cout << endl;
+	}
 }
