@@ -81,7 +81,7 @@ void return_data1(string str, string &str1, string &str2);//重载,这个是用�
 void return_data2(string str, string &str1, string &str2);//这个函数功能的实现跟上面的类似，具体用途是用来边查询方便一些，如查询A>B>C，你只需要输入A>B就可以了，毕竟你大概率不会记住它俩的距离
 void check_str(string str, string &A, string &B, string &C);//这个是用来拆单个string，上面的函数都是用string数组，不适于用拆单独的string
 int return_Number(string str);//返回str中的数字字符串所对应的整数
-void inputString(char *filename,string str[]);//将filename所指文件按行输出到数组str[]中
+void inputString(const char *filename,string str[]);//将filename所指文件按行输出到数组str[]中
 
 //----菜单函数
 void CountMenu();//账号菜单
