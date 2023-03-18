@@ -7,6 +7,8 @@
 #include"fstream"
 #include<algorithm>
 #include<string>
+#include<stack>
+#include<vector>
 using namespace std;
 
 #define SIZE 10 //最大用户数
@@ -14,7 +16,7 @@ using namespace std;
 #define INFINITY 32767     //INFINITY表示极大值、无穷大
 int scount = 0;
 int UidNumber = 0;
-bool IsVip = false;//判断是不是VIP
+bool IsVip = true;//判断是不是VIP
 bool ZHUANGTAI = false;//判断user.txt文件是否成功打开
 bool UpOrDown = false;//判断用户有无上号
 bool MapPrintOk = false;//判断地图是否打印出来
@@ -67,6 +69,7 @@ public:
     void EdgeDataChange();//对节点的边操作
     void DATASAVE(int); //将修改后的数据写入文件。1是为写入边数据，其余是写入地图数据
     void DeleteEdge();  //删除特定边
+    void allpath();      //查询所有路径
     int GetEdgeNum();    //获取当前txt文件边的数量
     int GetvertexNum(){return vertexNum++;}
 private:
