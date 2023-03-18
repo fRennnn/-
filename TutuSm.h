@@ -805,10 +805,44 @@ void MGraph::ChangeMapImf(int i)
 
 MGraph::MGraph()//初始化邻接矩阵 
 {
-	ifstream ifile;
-    ifile.open("Node.txt",ios::in);
+    string tmp;
+    int NodeNumber=0;
+    MapNode Test[50];
 
-    
+    for(int i=0;i<50;i++)
+    {
+        Test[i].Imformation="";
+        Test[i].Name="";
+        Test[i].Number=0;
+    }
+
+    ifstream ifile;
+    ifile.open("Node.txt",ios::in);
+    if(ifile.fail())
+    {
+    cout<<"打开文件失败";
+    system("pause");
+    exit(0);
+    }
+    else
+    {
+        while(getline(ifile,tmp))
+        {
+            if(tmp=="")//忽略空行
+            continue;
+            else
+            {
+            NodeNumber++;
+            //cout<<tmp<<endl;
+            }
+        }
+    }
+    NodeNumber=NodeNumber/3;
+    vertexNum=NodeNumber;
+    number=vertexNum;
+    ifile.close();
+
+    ifile.open("Node.txt",ios::in);
     if(!ifile.is_open())
     {
         cout<<"文件打开失败"<<endl;
@@ -818,13 +852,17 @@ MGraph::MGraph()//初始化邻接矩阵
 
     for(int i=0;!ifile.eof()&&i<50;i++)//加载地图数据
     {
-        ifile >> vertex[i].Number;
-        ifile >> vertex[i].Name;
-        ifile >> vertex[i].Imformation;
-        vertexNum=i;
-        number=vertexNum;
+        ifile >> Test[i].Number;
+        ifile >> Test[i].Name;
+        ifile >> Test[i].Imformation;
+        
+        if(i>NodeNumber-1)break;
+        vertex[Test[i].Number-1].Number=Test[i].Number;
+        vertex[Test[i].Number-1].Name=Test[i].Name;
+        vertex[Test[i].Number-1].Imformation=Test[i].Imformation;
     }
 	ifile.close();
+
 	for (int i = 0; i < maxsize; i++)          //初始化邻接矩阵
  		for (int j = 0; j < maxsize; j++)
 			edge[i][j] = INFINITY;            //假设边上权值最大是32767
@@ -1064,7 +1102,7 @@ void MGraph::DeleteNode(int x)
     string name1,number1,imf1;//记录需要删除的数据
     string Fir,Sec;//记录边是否相等
     name1=vertex[position].Name;
-    number1=vertex[position].Number;
+    number1=_Number;
     imf1=vertex[position].Imformation;
     vertex[position].Name="NULL";
     vertex[position].Number=0;
@@ -1214,9 +1252,44 @@ int MGraph::GetEdgeNum()
 
 void MGraph::Update()
 {
-    ifstream ifile;
-    ifile.open("Node.txt",ios::in);//更新咯
+    string tmp;
+    int NodeNumber=0;
+    MapNode Test[50];
 
+    for(int i=0;i<50;i++)
+    {
+        Test[i].Imformation="";
+        Test[i].Name="";
+        Test[i].Number=0;
+    }
+
+    ifstream ifile;
+    ifile.open("Node.txt",ios::in);
+    if(ifile.fail())
+    {
+    cout<<"打开文件失败";
+    system("pause");
+    exit(0);
+    }
+    else
+    {
+        while(getline(ifile,tmp))
+        {
+            if(tmp=="")//忽略空行
+            continue;
+            else
+            {
+            NodeNumber++;
+            //cout<<tmp<<endl;
+            }
+        }
+    }
+    NodeNumber=NodeNumber/3;
+    vertexNum=NodeNumber;
+    number=vertexNum;
+    ifile.close();
+
+    ifile.open("Node.txt",ios::in);
     if(!ifile.is_open())
     {
         cout<<"文件打开失败"<<endl;
@@ -1224,13 +1297,16 @@ void MGraph::Update()
         return;
     }
 
-    for(int i=0;!ifile.eof()&&i<50;i++)
+    for(int i=0;!ifile.eof()&&i<50;i++)//加载地图数据
     {
-        ifile >> vertex[i].Number;
-        ifile >> vertex[i].Name;
-        ifile >> vertex[i].Imformation;
-        vertexNum=i;
-        number=vertexNum;
+        ifile >> Test[i].Number;
+        ifile >> Test[i].Name;
+        ifile >> Test[i].Imformation;
+        
+        if(i>NodeNumber-1)break;
+        vertex[Test[i].Number-1].Number=Test[i].Number;
+        vertex[Test[i].Number-1].Name=Test[i].Name;
+        vertex[Test[i].Number-1].Imformation=Test[i].Imformation;
     }
 	ifile.close();
 
