@@ -77,7 +77,7 @@ void Menu()
     
     PrintMenu();   //打印菜单表
     cout<<">>";
-    i=getch();
+    i=getch();//这个问题搞一下
     //-----------------------------------这是菜单,写好的函数放进去就是了
     switch (i)
     {
@@ -189,7 +189,7 @@ void CountMenu()
     User Uid;
     while(1)
     {
-        ch=getch();
+        ch=getch();//这也没关系啊
         if(GetAsyncKeyState(VK_ESCAPE))
         {
             system("cls");
@@ -223,7 +223,7 @@ void CountMenu()
                 cout<<"干什么呢?";
             }
             else
-            Uid.Registers();
+            Uid.Registers();//z这里跳过了
         }
         break;
         case '3':
@@ -252,7 +252,7 @@ void User::Save()
 
     for(int i = 0; i<scount; i++)
     {
-        ofile << user[i].Account <<endl;
+        ofile << user[i].Account <<endl;//ofile只是把user的数据输出到user。txt文件里面
         ofile << user[i].password <<endl;
         ofile << user[i].UID<<endl;
     }
@@ -271,7 +271,7 @@ inline void User::Read()//user文件不能有多余的行数
         return;
     }
     ZHUANGTAI = true;
-    for(int i=0;!ifile.eof();i++)
+    for(int i=0;!ifile.eof();i++)//这里是把user。txt文件的数据一个一个输入到user数组里面
     {
         ifile >> user[i].Account;
         ifile >> user[i].password;
@@ -304,7 +304,7 @@ inline void User::Read()//user文件不能有多余的行数
         return;
     }
     ifile>>UidNumber;
-    ifile.close();
+    ifile.close();//
 }
 void User::Registers()
 {
@@ -316,8 +316,8 @@ void User::Registers()
     char ch,password0[20];
     char ch1,password1[20];
     int x = 0,x1 = 0;
-    
-    for(int i=scount;i<SIZE;i++)
+    int i;
+    for(i=scount;i<SIZE;i++)//???草！
     {
         system("cls");
         MapPrintOk=false;
@@ -458,6 +458,7 @@ void User::Registers()
             if(choice == 'n'||choice == 'N')
             break;
     }
+    if(i==SIZE)cout<<"账号满了"<<endl;
 }
 
 void User::Delete_Account()
@@ -515,7 +516,12 @@ void User::Delete_Account()
     scount--;
     IsVip=false;
     UpOrDown=false;
+
+    user[Location].Account="";//把删掉的数据全部初始化 
+    user[Location].UID="";//Location是当前账号在user数组里面的位置
+    user[Location].password="";
 }
+
 void User::Login()
 {
     us.Read();
@@ -704,7 +710,7 @@ void MGraph::MapCheck(int i)
     int position=i-1;
     if(vertex[position].Name=="")
     {
-        cout<<"没有相关数据:C"<<endl;
+        cout<<"地点不存在"<<endl;
     }
     else
     {
@@ -1549,89 +1555,94 @@ void check_str(string str, string &A, string &B, string &C)
 
     biggerthan=true;
 }
-void MGraph::allpath() 
+
+void MGraph::path(int y,int b,int c)
 {
+	int s, t=c+1;//t用于存储路径上下一顶点对应的d[]数组元素的下标
+	if(way[c]==b)
+	{	p++;
+		cout<<"路径"<<p<<":";
+		for(s=0;s<c;s++)
+		cout<<a.vertex[way[s]].Name<<"->";
+		cout<<a.vertex[way[s]].Name<<endl;
+	}
+	else
+	{
+		 s=0;
+		while(s<vertexNum)
+		{
+			if((edge[way[c]][s]<INFINITY)&&visited[s]==0)
+			{
+				visited[s]=1;
+				way[t]=s;
+				path(y,b,t);
+				visited[s]=0;
+			}
+			s++;
+		}
+		
+	}
+}
+
+void MGraph::allpath()
+{
+    bool A=false,B=false;
+    int check=0;
 	int startnum,nodenum;
-	bool instack[vertexNum]={0};
-	stack<int> nodestack;
-	int c_position=0;
-	vector<vector<int> >paths;//存储所有路径
-	vector<int>path;//存储单条路径
-	cout<<"请输入想要查询所有路径的两个景点的编号："<<endl;
+	p=0;
+	cout<<"请输入您要查询的两个景点的编号："<<endl;
+    cout<<"格式为  (A  空格  B)";
 	cin>>startnum>>nodenum;
 	while(startnum>vertexNum||nodenum>vertexNum)
 	{
-		cout<<"输入的编号大于顶点数，输入错误！请重新输入："<<endl;
+		cout<<"景点编号大于景点数，请重新输入："<<endl;
 		cin>>startnum>>nodenum;
 	}
-	cout<<a.vertex[startnum-1].Name<<"到"<<a.vertex[nodenum-1].Name<<"之间的所有路径为："<<endl;
-	nodestack.push(startnum-1);
-	instack[0]=1;//设置起点已入栈，1表示在栈中，0 表示不在
-	int tmp,top_element;//记录栈顶元素
-    while(!nodestack.empty())
+     while(1)//这里是检查两个点是否至少有一边，主要是检查能不能到达的问题
     {
-    	top_element=nodestack.top();//查看栈顶元素，判断是否已经到达终点
-    	if(top_element==nodenum-1)//若到达终点，输出路径，弹出栈中两个点，设置出栈状态
-    	{
-    		while(!nodestack.empty())
-    		{
-    			tmp=nodestack.top();
-    			nodestack.pop();
-    			path.push_back(tmp);
-			}
-    		paths.push_back(path);
-    		for (vector<int>::reverse_iterator rit = path.rbegin(); rit != path.rend(); rit++)
-			{
-		    	nodestack.push(*rit);
-			}
-			path.clear();//清除单条路径
-		 
-			nodestack.pop();
-			instack[top_element]=0;
-			c_position=nodestack.top();
-			top_element=nodestack.top();
-			nodestack.pop();
-			instack[top_element]=0; 
-			}
-		else
-		{
-			int i=0;
-			for(i=c_position+1;i<nodenum+2;i++)
-			{
-				if(instack[i]==0&&a.edge[top_element][i]!=INFINITY)//未入栈，而且节点之间有边相连
-				{
-					instack[i]=1;
-					nodestack.push(i);//入栈
-					c_position=0;
-					break; 
-				}
-			}
-			if(i==nodenum+2)
-			{
-				top_element=nodestack.top();
-				instack[top_element]=0;
-				c_position=nodestack.top();
-				nodestack.pop();
-			}
-		}
-	}
-	for (int i = 0; i <paths.size(); i++)
-	{
-		cout << "路径" << i+1 << ": ";
-		for (int j = paths[i].size()-1; j >=0; j--)
-		{
-		    if (j == 0)
-		    {
-		                //cout << paths[i][j];
-		    	cout << a.vertex[ paths[i][j] ].Name;
-		    }
-		    else
-		    {
-		                //cout << paths[i][j] << "->";
-		        cout << a.vertex[ paths[i][j] ].Name<< "->";
-		    }
-		
-		}
-		cout << endl;
-	}
+        if(A==false)
+        {
+        if(edge[startnum-1][check]!=INFINITY)//如果有边
+       {
+        A=true;
+       }
+       else
+       {
+        A=false;
+       }
+        }
+
+         if(B==false)
+       {
+        if(edge[nodenum-1][check]!=INFINITY)//如果有边
+       {
+        B=true;
+       }
+       else
+       {
+        B=false;
+       }
+       }
+
+        if(A==true&&B==true)break;//如果两点都有路的话
+        else check++;
+        if(check==vertexNum)//查找完后发现没有路
+        {
+        if(A==false)
+        {
+        cout<<vertex[startnum-1].Name<<"没有路能走"<<endl;
+        }
+        else if(B==false)
+        {     
+        cout<<vertex[nodenum-1].Name<<"没有路能走"<<endl;       
+        }
+        system("pause");
+        return;
+        }
+    }
+	way[0]=startnum-1;
+	for(int k=0;k<vertexNum;k++)
+	visited[k]=0;
+	visited[startnum-1]=1;
+	path(startnum-1,nodenum-1,0);
 }
