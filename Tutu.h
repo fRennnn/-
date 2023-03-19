@@ -7,8 +7,6 @@
 #include"fstream"
 #include<algorithm>
 #include<string>
-#include<stack>
-#include<vector>
 using namespace std;
 
 #define SIZE 10 //最大用户数
@@ -16,15 +14,17 @@ using namespace std;
 #define INFINITY 32767     //INFINITY表示极大值、无穷大
 int scount = 0;
 int UidNumber = 0;
-bool IsVip = true;//判断是不是VIP
+bool IsVip = false;//判断是不是VIP
 bool ZHUANGTAI = false;//判断user.txt文件是否成功打开
 bool UpOrDown = false;//判断用户有无上号
 bool MapPrintOk = false;//判断地图是否打印出来
 bool biggerthan = false,distanceData = false;//判断
 int TEST=1;//不用管这个，测试用的值
-
+int way[maxsize];//路径 
 int Location = 0;//用户账号所在的位置
 int number = 0; //当前景点数 
+int visited[maxsize];//标记访问过的点 
+int p;//用来标记路径数 
 void Menu();
 
 class User//用户类
@@ -76,7 +76,9 @@ private:
  	MapNode vertex[maxsize];           //存放图中顶点的数组
     int edge[maxsize][maxsize];           //存放图中边的数组
     int vertexNum, edgeNum;              //图的顶点数和边数
+     void path(int y,int b,int c);
  };
+ 
  
 //----文件内的数据操作
 void return_data1(string str, string &str1, string &str2, string &str3);//使用string类的find函数分隔字符串
